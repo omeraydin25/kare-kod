@@ -867,6 +867,7 @@ async function handleLogin(e) {
     }
     isLoggedIn = true;
     updateNavVisibility();
+    await loadProductsFromSupabase();
     navigate('dashboard');
     showToast('success', '🎉 Hoş geldiniz! Giriş başarılı.');
 }
@@ -972,115 +973,220 @@ function renderDashboard() {
     `).join('');
 }
 
-// ==================== ÜRÜN YÖNETİMİ ====================
+// ==================== ÜRÜN YÖNETİMİ (SUPABASE) ====================
 let editingProductId = null;
+let productsLoaded = false;
+
+function productIdArg(id) {
+    return JSON.stringify(String(id));
+}
+
+async function getCurrentUser() {
+    const { data, error } = await supabaseClient.auth.getUser();
+    if (error || !data.user) return null;
+    return data.user;
+}
+
+async function loadProductsFromSupabase(showMessage = false) {
+    const user = await getCurrentUser();
+    if (!user) {
+        DB.products = [];
+        productsLoaded = false;
+        renderProducts();
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Ürünler yüklenemedi:', error);
+        showToast('error', '❌ Ürünler yüklenemedi: ' + error.message);
+        return;
+    }
+
+    DB.products = (data || []).map(p => ({
+        id: p.id,
+        name: p.name || '',
+        brand: p.brand || 'ShopNex',
+        category: p.category || 'Genel',
+        price: p.price == null ? '' : String(p.price),
+        discount: p.discount_price == null ? '' : String(p.discount_price),
+        stock: Number(p.stock || 0),
+        barcode: p.barcode || '-',
+        sku: p.sku || '-',
+        unit: p.unit || 'Adet',
+        active: p.active !== false,
+        desc: p.description || '',
+        photo: p.photo_url || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(p.name || 'Ürün') + '&background=4f46e5&color=fff&size=400')
+    }));
+
+    productsLoaded = true;
+    renderProducts();
+    updateFavCount();
+    if (currentPage === 'dashboard') renderDashboard();
+    if (showMessage) showToast('success', '✅ Ürünler yenilendi.');
+}
 
 function renderProducts() {
     const table = document.getElementById('productTable');
-    table.innerHTML = DB.products.map(p => `
+    if (!table) return;
+
+    if (!isLoggedIn) {
+        table.innerHTML = '<tr><td colspan="7" class="px-5 py-14 text-center text-gray-500">Ürünleri görmek için giriş yapın.</td></tr>';
+        return;
+    }
+
+    if (!productsLoaded) {
+        table.innerHTML = '<tr><td colspan="7" class="px-5 py-14 text-center text-gray-500">Ürünler yükleniyor...</td></tr>';
+        return;
+    }
+
+    if (!DB.products.length) {
+        table.innerHTML = '<tr><td colspan="7" class="px-5 py-14 text-center"><div class="text-4xl mb-3">📦</div><p class="font-bold">Henüz ürün yok</p><p class="text-sm text-gray-500 mt-1">“Yeni Ürün” butonuyla ilk ürününüzü ekleyin.</p></td></tr>';
+        return;
+    }
+
+    table.innerHTML = DB.products.map(p => {
+        const idArg = productIdArg(p.id);
+        return `
         <tr class="hover:bg-gray-50 dark:hover:bg-dark-900 transition">
-            <td class="px-5 py-4"><div class="flex items-center gap-3"><img src="${p.photo}" class="w-10 h-10 rounded-xl object-cover" loading="lazy"><span class="font-bold text-sm">${escapeHtml(p.name)}</span></div></td>
+            <td class="px-5 py-4"><div class="flex items-center gap-3"><img src="${p.photo}" class="w-10 h-10 rounded-xl object-cover" loading="lazy" onerror="this.src='https://ui-avatars.com/api/?name=U&background=4f46e5&color=fff'"><span class="font-bold text-sm">${escapeHtml(p.name)}</span></div></td>
             <td class="px-5 py-4 text-gray-500">${escapeHtml(p.category)}</td>
             <td class="px-5 py-4 font-bold">${p.discount ? `<span class="text-red-500">${p.discount}₺</span> <span class="text-gray-400 line-through text-xs">${p.price}₺</span>` : p.price + '₺'}</td>
             <td class="px-5 py-4">${p.stock}</td>
-            <td class="px-5 py-4 text-xs text-gray-500 font-mono">${p.sku}</td>
-            <td class="px-5 py-4"><button onclick="toggleProductStatus(${p.id})" class="text-xs font-bold px-3 py-1.5 rounded-full transition ${p.active ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'}">${p.active ? 'Aktif' : 'Pasif'}</button></td>
-            <td class="px-5 py-4"><div class="flex gap-1"><button onclick="editProduct(${p.id})" class="w-8 h-8 rounded-lg bg-nex-50 dark:bg-nex-900/20 text-nex-600 flex items-center justify-center hover:bg-nex-100 transition text-sm">✏️</button><button onclick="deleteProduct(${p.id})" class="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 flex items-center justify-center hover:bg-red-100 transition text-sm">🗑️</button><button onclick="openShareModal(${p.id})" class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-100 transition text-sm">📤</button></div></td>
-        </tr>
-    `).join('');
+            <td class="px-5 py-4 text-xs text-gray-500 font-mono">${escapeHtml(p.sku)}</td>
+            <td class="px-5 py-4"><button onclick='toggleProductStatus(${idArg})' class="text-xs font-bold px-3 py-1.5 rounded-full transition ${p.active ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'}">${p.active ? 'Aktif' : 'Pasif'}</button></td>
+            <td class="px-5 py-4"><div class="flex gap-1"><button onclick='editProduct(${idArg})' class="w-8 h-8 rounded-lg bg-nex-50 dark:bg-nex-900/20 text-nex-600 flex items-center justify-center hover:bg-nex-100 transition text-sm">✏️</button><button onclick='deleteProduct(${idArg})' class="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 flex items-center justify-center hover:bg-red-100 transition text-sm">🗑️</button><button onclick='openShareModal(${idArg})' class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-100 transition text-sm">📤</button></div></td>
+        </tr>`;
+    }).join('');
 }
 
 function openProductModal(id = null) {
+    if (!isLoggedIn) {
+        showToast('warning', '⚠️ Önce giriş yapmalısınız.');
+        navigate('login');
+        return;
+    }
+
     editingProductId = id;
     const modal = document.getElementById('productModal');
     document.getElementById('modalTitle').textContent = id ? 'Ürün Düzenle' : 'Yeni Ürün Ekle';
+    const form = document.querySelector('#productModal form');
+    form.reset();
+    document.getElementById('pActive').checked = true;
+
     if (id) {
-        const p = DB.products.find(x => x.id === id);
+        const p = DB.products.find(x => String(x.id) === String(id));
+        if (!p) return showToast('error', '❌ Ürün bulunamadı.');
         document.getElementById('pName').value = p.name;
         document.getElementById('pPrice').value = p.price;
         document.getElementById('pDiscount').value = p.discount;
         document.getElementById('pStock').value = p.stock;
-        document.getElementById('pBarcode').value = p.barcode;
-        document.getElementById('pSku').value = p.sku;
+        document.getElementById('pBarcode').value = p.barcode === '-' ? '' : p.barcode;
+        document.getElementById('pSku').value = p.sku === '-' ? '' : p.sku;
         document.getElementById('pBrand').value = p.brand;
         document.getElementById('pCategory').value = p.category;
         document.getElementById('pDesc').value = p.desc;
+        document.getElementById('pUnit').value = p.unit;
         document.getElementById('pActive').checked = p.active;
-    } else {
-        document.querySelector('#productModal form').reset();
-        document.getElementById('pActive').checked = true;
     }
     modal.classList.add('active');
 }
 
 function closeProductModal() { document.getElementById('productModal').classList.remove('active'); }
 
-function saveProduct(e) {
-    e.preventDefault();
-    const data = {
-        name: escapeHtml(document.getElementById('pName').value),
-        price: document.getElementById('pPrice').value,
-        discount: document.getElementById('pDiscount').value,
-        stock: parseInt(document.getElementById('pStock').value) || 0,
-        barcode: document.getElementById('pBarcode').value || '-',
-        sku: document.getElementById('pSku').value || 'NX-' + String(DB.products.length + 1).padStart(3, '0'),
-        brand: escapeHtml(document.getElementById('pBrand').value) || 'ShopNex',
-        category: escapeHtml(document.getElementById('pCategory').value) || 'Genel',
-        desc: escapeHtml(document.getElementById('pDesc').value),
-        unit: document.getElementById('pUnit').value,
-        active: document.getElementById('pActive').checked,
-        photo: "https://ui-avatars.com/api/?name=" + encodeURIComponent(document.getElementById('pName').value) + "&background=4f46e5&color=fff&size=400"
-    };
-    
-    // Fotoğraf yükleme
-    const photoInput = document.getElementById('pPhoto');
-    const finalize = () => {
-        if (editingProductId) {
-            const idx = DB.products.findIndex(x => x.id === editingProductId);
-            DB.products[idx] = { ...DB.products[idx], ...data };
-            addAction('✏️', `${data.name} düzenlendi`);
-            showToast('success', '✅ Ürün güncellendi!');
-        } else {
-            data.id = Date.now();
-            DB.products.unshift(data);
-            addAction('✅', `${data.name} eklendi`);
-            showToast('success', '✅ Ürün eklendi!');
-        }
-        closeProductModal();
-        renderProducts();
-    };
-    
-    if (photoInput.files && photoInput.files[0]) {
+async function fileToDataUrl(file) {
+    return new Promise((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = ev => { data.photo = ev.target.result; finalize(); };
-        reader.readAsDataURL(photoInput.files[0]);
-    } else { finalize(); }
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+async function saveProduct(e) {
+    e.preventDefault();
+    const user = await getCurrentUser();
+    if (!user) return showToast('error', '❌ Oturum bulunamadı. Tekrar giriş yapın.');
+
+    const submitBtn = e.submitter;
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = '⏳ Kaydediliyor...'; }
+
+    try {
+        const name = document.getElementById('pName').value.trim();
+        const photoInput = document.getElementById('pPhoto');
+        const oldProduct = editingProductId ? DB.products.find(x => String(x.id) === String(editingProductId)) : null;
+        let photoUrl = oldProduct?.photo || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(name) + '&background=4f46e5&color=fff&size=400');
+
+        if (photoInput.files?.[0]) {
+            if (photoInput.files[0].size > 1024 * 1024) throw new Error('Fotoğraf en fazla 1 MB olabilir.');
+            photoUrl = await fileToDataUrl(photoInput.files[0]);
+        }
+
+        const payload = {
+            user_id: user.id,
+            name,
+            price: Number(document.getElementById('pPrice').value),
+            discount_price: document.getElementById('pDiscount').value ? Number(document.getElementById('pDiscount').value) : null,
+            stock: Number(document.getElementById('pStock').value) || 0,
+            barcode: document.getElementById('pBarcode').value.trim() || null,
+            sku: document.getElementById('pSku').value.trim() || ('NX-' + Date.now().toString().slice(-6)),
+            brand: document.getElementById('pBrand').value.trim() || 'ShopNex',
+            category: document.getElementById('pCategory').value.trim() || 'Genel',
+            description: document.getElementById('pDesc').value.trim(),
+            unit: document.getElementById('pUnit').value,
+            active: document.getElementById('pActive').checked,
+            photo_url: photoUrl,
+            updated_at: new Date().toISOString()
+        };
+
+        let result;
+        if (editingProductId) {
+            result = await supabaseClient.from('products').update(payload).eq('id', editingProductId).select().single();
+        } else {
+            result = await supabaseClient.from('products').insert(payload).select().single();
+        }
+        if (result.error) throw result.error;
+
+        addAction(editingProductId ? '✏️' : '✅', `${name} ${editingProductId ? 'düzenlendi' : 'eklendi'}`);
+        closeProductModal();
+        await loadProductsFromSupabase();
+        showToast('success', editingProductId ? '✅ Ürün güncellendi!' : '✅ Ürün Supabase’e kaydedildi!');
+    } catch (error) {
+        console.error(error);
+        showToast('error', '❌ Kaydetme hatası: ' + error.message);
+    } finally {
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = '💾 Kaydet'; }
+    }
 }
 
 function editProduct(id) { openProductModal(id); }
 
-function deleteProduct(id) {
-    if (confirm('Bu ürünü silmek istediğinize emin misiniz?')) {
-        const p = DB.products.find(x => x.id === id);
-        DB.products = DB.products.filter(x => x.id !== id);
-        DB.favorites = DB.favorites.filter(f => f !== id);
-        addAction('🗑️', `${p.name} silindi`);
-        renderProducts();
-        updateFavCount();
-        showToast('info', '🗑️ Ürün silindi.');
-    }
+async function deleteProduct(id) {
+    if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
+    const p = DB.products.find(x => String(x.id) === String(id));
+    const { error } = await supabaseClient.from('products').delete().eq('id', id);
+    if (error) return showToast('error', '❌ Silme hatası: ' + error.message);
+
+    DB.favorites = DB.favorites.filter(f => String(f) !== String(id));
+    if (p) addAction('🗑️', `${p.name} silindi`);
+    await loadProductsFromSupabase();
+    updateFavCount();
+    showToast('info', '🗑️ Ürün Supabase’den silindi.');
 }
 
-function toggleProductStatus(id) {
-    const p = DB.products.find(x => x.id === id);
-    p.active = !p.active;
+async function toggleProductStatus(id) {
+    const p = DB.products.find(x => String(x.id) === String(id));
+    if (!p) return;
+    const nextStatus = !p.active;
+    const { error } = await supabaseClient.from('products').update({ active: nextStatus, updated_at: new Date().toISOString() }).eq('id', id);
+    if (error) return showToast('error', '❌ Durum değiştirilemedi: ' + error.message);
+    p.active = nextStatus;
     renderProducts();
     showToast('info', p.active ? '✅ Ürün aktifleştirildi' : '⏸️ Ürün pasifleştirildi');
-}
-
-function addAction(icon, text) {
-    DB.actions.unshift({ icon, text, time: 'Şimdi' });
-    if (DB.actions.length > 10) DB.actions.pop();
 }
 
 // CSV İşlemleri
@@ -1284,9 +1390,21 @@ window.addEventListener('load', async () => {
     updateFavCount();
     updateNavVisibility();
 
-    supabaseClient.auth.onAuthStateChange((_event, session) => {
+    if (isLoggedIn) await loadProductsFromSupabase();
+    else {
+        DB.products = [];
+        productsLoaded = false;
+    }
+
+    supabaseClient.auth.onAuthStateChange(async (_event, session) => {
         isLoggedIn = Boolean(session);
         updateNavVisibility();
+        if (session) await loadProductsFromSupabase();
+        else {
+            DB.products = [];
+            productsLoaded = false;
+            renderProducts();
+        }
     });
 
     setTimeout(() => {

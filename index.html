@@ -3,487 +3,1245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopNex - Akıllı Dijital Mağaza Platformu</title>
-    <meta name="description" content="ShopNex ile işletmenizi dijitalleştirin. QR menü, ürün yönetimi, istatistikler ve daha fazlası.">
-    <meta property="og:title" content="ShopNex - Akıllı Dijital Mağaza">
+    <title>ShopNex - Akıllı Ürün Kataloğu & QR Kod Yönetim Sistemi</title>
+    <meta name="description" content="ShopNex ile işletmenizi dijitalleştirin. Tek QR kod ile tüm ürünlerinizi müşterilerinize sunun. Ücretsiz başlayın.">
+    <meta name="keywords" content="qr menü, dijital katalog, ürün yönetimi, qr kod sistemi">
+    <meta name="robots" content="index, follow">
+    <meta name="author" content="ShopNex">
+    <!-- Open Graph -->
+    <meta property="og:title" content="ShopNex - Akıllı Ürün Kataloğu & QR Kod Yönetim Sistemi">
     <meta property="og:description" content="Tek QR kod ile tüm ürünlerinizi müşterilerinize sunun.">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://shopnex.io">
     <meta property="og:image" content="https://shopnex.io/og.png">
-    <meta name="robots" content="index, follow">
-    <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ShopNex","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"TRY"}}</script>
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Schema.org -->
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ShopNex","applicationCategory":"BusinessApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"TRY"},"aggregateRating":{"@type":"AggregateRating","ratingValue":"4.9","ratingCount":"2847"}}</script>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{nex:{50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81'}}}}}</script>
+    <script>
+    tailwind.config = {
+        darkMode: 'class',
+        theme: {
+            extend: {
+                colors: {
+                    nex: {50:'#eef2ff',100:'#e0e7ff',200:'#c7d2fe',300:'#a5b4fc',400:'#818cf8',500:'#6366f1',600:'#4f46e5',700:'#4338ca',800:'#3730a3',900:'#312e81'},
+                    dark: {800:'#1e1e2e',900:'#11111b',950:'#0a0a14'}
+                },
+                fontFamily: { sans: ['Inter','system-ui','sans-serif'] },
+                animation: {
+                    'fade-in': 'fadeIn 0.5s ease forwards',
+                    'slide-up': 'slideUp 0.5s ease forwards',
+                    'slide-down': 'slideDown 0.3s ease forwards',
+                    'scale-in': 'scaleIn 0.3s ease forwards',
+                    'pulse-slow': 'pulse 3s infinite',
+                    'float': 'float 3s ease-in-out infinite',
+                }
+            }
+        }
+    }
+    </script>
     <style>
-        .view{display:none}.view.active{display:block}
-        .cerceve-yok{border:none}.cerceve-ince{border:8px solid #111827}.cerceve-kalin{border:16px solid #4f46e5;border-radius:24px}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        .anim{animation:fadeUp .4s ease forwards;opacity:0}
-        @keyframes heartBeat{0%{transform:scale(1)}25%{transform:scale(1.3)}50%{transform:scale(1)}75%{transform:scale(1.2)}100%{transform:scale(1)}}
-        .heart-anim{animation:heartBeat .4s ease}
-        @keyframes slideIn{from{opacity:0;transform:translateX(100%)}to{opacity:1;transform:translateX(0)}}
-        .toast{animation:slideIn .3s ease}
-        ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#6366f1;border-radius:3px}
+        /* ===== TEMEL STİLLER ===== */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
+        
+        /* ===== SAYFA GEÇİŞ ANİMASYONLARI ===== */
+        .page { display: none; opacity: 0; transform: translateY(10px); }
+        .page.active { display: block; animation: pageIn 0.4s ease forwards; }
+        @keyframes pageIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes heartBeat { 0%{transform:scale(1)}25%{transform:scale(1.3)}50%{transform:scale(1)}75%{transform:scale(1.15)}100%{transform:scale(1)} }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .heart-anim { animation: heartBeat 0.4s ease; }
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        .stagger-4 { animation-delay: 0.4s; }
+        
+        /* ===== YÜKLENME ANİMASYONU ===== */
+        .loader { width: 40px; height: 40px; border: 4px solid #e0e7ff; border-top-color: #4f46e5; border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .skeleton { background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        .dark .skeleton { background: linear-gradient(90deg, #2a2a3e 25%, #3a3a4e 50%, #2a2a3e 75%); background-size: 200% 100%; }
+        
+        /* ===== TOAST BİLDİRİM ===== */
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { padding: 14px 20px; border-radius: 12px; color: white; font-weight: 600; font-size: 14px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); animation: slideDown 0.3s ease; display: flex; align-items: center; gap: 10px; backdrop-filter: blur(10px); }
+        .toast-success { background: linear-gradient(135deg, #10b981, #059669); }
+        .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .toast-info { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+        .toast-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #6366f1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4f46e5; }
+        
+        /* ===== QR ÇERÇEVELERİ ===== */
+        .qr-frame-none { border: none; }
+        .qr-frame-thin { border: 6px solid #1f2937; border-radius: 12px; }
+        .qr-frame-thick { border: 14px solid #4f46e5; border-radius: 20px; }
+        .qr-frame-rounded { border: 10px solid #10b981; border-radius: 50%; }
+        
+        /* ===== MODAL ===== */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 16px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal-content { transform: scale(0.9) translateY(20px); transition: transform 0.3s; }
+        .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+        
+        /* ===== NAVBAR SCROLL ===== */
+        .nav-scrolled { box-shadow: 0 4px 30px rgba(0,0,0,0.1); backdrop-filter: blur(20px); }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2rem !important; }
+            .nav-links { display: none !important; }
+            .mobile-menu { display: flex !important; }
+        }
+        @media (min-width: 769px) {
+            .mobile-menu { display: none !important; }
+        }
+        
+        /* ===== PRINT ===== */
+        @media print {
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { position: absolute; left: 0; top: 0; }
+        }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-gray-900 font-sans text-gray-800 dark:text-gray-100 transition-colors duration-300">
+<body class="bg-gray-50 dark:bg-dark-900 text-gray-800 dark:text-gray-100 transition-colors duration-300">
 
-<!-- TOAST BİLDİRİM -->
-<div id="toast" class="hidden fixed top-4 right-4 z-[999] bg-gray-800 dark:bg-white text-white dark:text-gray-800 px-5 py-3 rounded-2xl shadow-2xl text-sm font-bold toast"></div>
+<!-- ===== TOAST BİLDİRİM ALANI ===== -->
+<div class="toast-container" id="toastContainer"></div>
 
-<!-- ==================== NAVBAR ==================== -->
-<nav id="admin-nav" class="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-40 transition-colors">
-    <div class="max-w-7xl mx-auto px-4 py-2.5 flex justify-between items-center">
-        <!-- ShopNex Logo -->
-        <div onclick="sayfaGoster('view-ana')" class="flex items-center gap-2 cursor-pointer">
-            <div class="w-9 h-9 bg-gradient-to-br from-nex-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+<!-- ===== YÜKLENME EKRANI ===== -->
+<div id="loadingScreen" class="fixed inset-0 bg-white dark:bg-dark-900 z-[9999] flex flex-col items-center justify-center transition-opacity duration-500">
+    <div class="w-16 h-16 bg-gradient-to-br from-nex-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 animate-float">
+        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+    </div>
+    <div class="loader mb-4"></div>
+    <p class="text-sm font-semibold text-gray-500 dark:text-gray-400">ShopNex yükleniyor...</p>
+</div>
+
+<!-- ===== NAVBAR ===== -->
+<nav id="mainNav" class="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-dark-800/80 backdrop-blur-xl border-b border-gray-100 dark:border-gray-800 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+        <div class="flex justify-between items-center h-16">
+            <!-- Logo -->
+            <a href="#" onclick="navigate('home')" class="flex items-center gap-2.5 group">
+                <div class="w-9 h-9 bg-gradient-to-br from-nex-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-nex-500/25 group-hover:scale-110 transition-transform">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                </div>
+                <span class="text-xl font-extrabold text-gray-900 dark:text-white">Shop<span class="text-nex-600">Nex</span></span>
+            </a>
+            
+            <!-- Desktop Nav (Public) -->
+            <div id="navPublic" class="nav-links hidden md:flex items-center gap-1">
+                <a href="#ozellikler" onclick="scrollToSection('ozellikler')" class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-nex-600 dark:hover:text-nex-400 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">Özellikler</a>
+                <a href="#sss" onclick="scrollToSection('sss')" class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-nex-600 dark:hover:text-nex-400 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">SSS</a>
+                <a href="#iletisim" onclick="scrollToSection('iletisim')" class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-nex-600 dark:hover:text-nex-400 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">İletişim</a>
             </div>
-            <span class="text-xl font-extrabold text-gray-800 dark:text-white">Shop<span class="text-nex-600">Nex</span></span>
-        </div>
-        
-        <div id="nav-public" class="flex items-center gap-2">
-            <button onclick="dilDegistir()" id="dil-btn-p" class="font-bold text-xs bg-gray-100 dark:bg-gray-700 px-2.5 py-1.5 rounded-full hover:bg-gray-200">EN</button>
-            <button onclick="temaDegistir()" id="tema-btn-p" class="text-lg hover:scale-110 transition">🌙</button>
-            <button onclick="sayfaGoster('view-giris')" class="bg-nex-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-nex-700 transition shadow-lg shadow-nex-600/25">Giriş Yap</button>
-        </div>
-
-        <div id="nav-app" class="hidden items-center gap-2 flex-wrap">
-            <button onclick="sayfaGoster('view-panel')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">📊 Panel</button>
-            <button onclick="sayfaGoster('view-urunler')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">📦 Ürünler</button>
-            <button onclick="sayfaGoster('view-favoriler')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">❤️ Favoriler <span id="fav-sayac-nav" class="bg-red-500 text-white text-[10px] px-1.5 rounded-full">0</span></button>
-            <button onclick="sayfaGoster('view-qr')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">📱 QR</button>
-            <button onclick="sayfaGoster('view-istatistik')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">📈 İstatistik</button>
-            <button onclick="sayfaGoster('view-yonetim')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">👥 Yönetim</button>
-            <button onclick="sayfaGoster('view-guvenlik')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">🔒 Güvenlik</button>
-            <button onclick="sayfaGoster('view-seo')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">🔍 SEO</button>
-            <button onclick="sayfaGoster('view-reklam')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">📢 Reklam</button>
-            <button onclick="sayfaGoster('view-yedek')" class="text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 px-2 py-1 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/30 transition">💾 Yedek</button>
-            <div class="flex items-center gap-2 border-l dark:border-gray-600 pl-2">
-                <button onclick="dilDegistir()" id="dil-btn-a" class="font-bold text-xs bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full">EN</button>
-                <button onclick="temaDegistir()" id="tema-btn-a" class="text-lg">🌙</button>
-                <div class="w-8 h-8 bg-gradient-to-br from-nex-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold">SN</div>
-                <button onclick="cikisYap()" class="text-red-500 text-xs font-bold hover:underline">Çıkış</button>
+            
+            <!-- Desktop Nav (App) -->
+            <div id="navApp" class="nav-links hidden md:flex items-center gap-1">
+                <button onclick="navigate('dashboard')" class="nav-btn px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">📊 Panel</button>
+                <button onclick="navigate('products')" class="nav-btn px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">📦 Ürünler</button>
+                <button onclick="navigate('favorites')" class="nav-btn px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">❤️ Favoriler <span id="favCount" class="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full ml-1">0</span></button>
+                <button onclick="navigate('qr')" class="nav-btn px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">📱 QR</button>
+                <button onclick="navigate('stats')" class="nav-btn px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">📈 İstatistik</button>
+                <button onclick="navigate('admin')" class="nav-btn px-3 py-2 text-xs font-bold text-gray-600 dark:text-gray-300 hover:text-nex-600 rounded-lg hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">⚙️ Yönetim</button>
+            </div>
+            
+            <!-- Sağ Butonlar -->
+            <div class="flex items-center gap-2">
+                <button onclick="toggleTheme()" id="themeBtn" class="w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition text-lg">🌙</button>
+                <div id="authBtns" class="flex items-center gap-2">
+                    <button onclick="navigate('login')" class="px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-nex-600 transition">Giriş Yap</button>
+                    <button onclick="navigate('register')" class="px-5 py-2.5 text-sm font-bold text-white bg-gradient-to-r from-nex-600 to-purple-600 rounded-xl hover:shadow-lg hover:shadow-nex-500/25 hover:scale-105 transition-all">Ücretsiz Başla</button>
+                </div>
+                <div id="userBtns" class="hidden items-center gap-2">
+                    <button onclick="navigate('profile')" class="w-9 h-9 bg-gradient-to-br from-nex-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-xs font-bold hover:scale-110 transition">SN</button>
+                    <button onclick="logout()" class="text-xs font-bold text-red-500 hover:text-red-600 transition">Çıkış</button>
+                </div>
+                <!-- Mobil Menü Butonu -->
+                <button onclick="toggleMobileMenu()" class="mobile-menu w-9 h-9 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center md:hidden">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                </button>
             </div>
         </div>
+    </div>
+    <!-- Mobil Menü -->
+    <div id="mobileMenu" class="hidden md:hidden bg-white dark:bg-dark-800 border-t dark:border-gray-700 p-4 space-y-2 animate-slide-down">
+        <button onclick="navigate('home');toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-nex-50 dark:hover:bg-nex-900/20">🏠 Ana Sayfa</button>
+        <button onclick="navigate('dashboard');toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-nex-50 dark:hover:bg-nex-900/20">📊 Panel</button>
+        <button onclick="navigate('products');toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-nex-50 dark:hover:bg-nex-900/20">📦 Ürünler</button>
+        <button onclick="navigate('favorites');toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-nex-50 dark:hover:bg-nex-900/20">❤️ Favoriler</button>
+        <button onclick="navigate('qr');toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-nex-50 dark:hover:bg-nex-900/20">📱 QR Kod</button>
+        <button onclick="navigate('stats');toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-nex-50 dark:hover:bg-nex-900/20">📈 İstatistik</button>
+        <button onclick="navigate('admin');toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-nex-50 dark:hover:bg-nex-900/20">⚙️ Yönetim</button>
+        <button onclick="navigate('profile');toggleMobileMenu()" class="block w-full text-left px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-nex-50 dark:hover:bg-nex-900/20">👤 Profil</button>
     </div>
 </nav>
 
-<!-- ==================== ANA SAYFA ==================== -->
-<div id="view-ana" class="view active">
-    <header class="max-w-4xl mx-auto text-center mt-14 px-4 pb-20">
-        <div class="anim">
-            <div class="inline-flex items-center gap-2 bg-nex-50 dark:bg-nex-900/30 text-nex-700 dark:text-nex-300 px-4 py-2 rounded-full text-sm font-bold mb-6">
-                <div class="w-6 h-6 bg-gradient-to-br from-nex-500 to-purple-600 rounded-lg flex items-center justify-center"><svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div>
-                ShopNex ile Tanışın
+<!-- ===== SAYFA: ANA SAYFA ===== -->
+<div id="page-home" class="page active">
+    <!-- Hero -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+        <div class="absolute inset-0 bg-gradient-to-br from-nex-50 via-white to-purple-50 dark:from-dark-900 dark:via-dark-900 dark:to-dark-800"></div>
+        <div class="absolute top-20 left-10 w-72 h-72 bg-nex-200/30 dark:bg-nex-800/20 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-purple-200/30 dark:bg-purple-800/20 rounded-full blur-3xl"></div>
+        <div class="relative max-w-5xl mx-auto px-4 text-center py-20">
+            <div class="inline-flex items-center gap-2 bg-white dark:bg-dark-800 border border-nex-100 dark:border-nex-800 px-5 py-2.5 rounded-full text-sm font-semibold text-nex-700 dark:text-nex-300 shadow-sm mb-8 animate-slide-up">
+                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                Yeni nesil dijital katalog platformu
+            </div>
+            <h1 class="hero-title text-4xl md:text-6xl lg:text-7xl font-black text-gray-900 dark:text-white mb-6 leading-tight animate-slide-up stagger-1">
+                İşletmenizi<br><span class="bg-gradient-to-r from-nex-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">Dijitale Taşıyın</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-10 animate-slide-up stagger-2">
+                Tek QR kod ile tüm ürünlerinizi müşterilerinize sunun. Ürün yönetimi, istatistikler ve profesyonel tasarım — hepsi bir arada.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-slide-up stagger-3">
+                <button onclick="navigate('register')" class="px-8 py-4 bg-gradient-to-r from-nex-600 to-purple-600 text-white text-lg font-bold rounded-2xl shadow-xl shadow-nex-500/25 hover:shadow-2xl hover:shadow-nex-500/40 hover:scale-105 transition-all">
+                    🚀 Ücretsiz Başla
+                </button>
+                <button onclick="openCustomerPage()" class="px-8 py-4 bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-300 text-lg font-bold rounded-2xl border border-gray-200 dark:border-gray-700 hover:border-nex-300 hover:shadow-lg transition-all">
+                    👁️ Demo Görüntüle
+                </button>
+            </div>
+            <!-- Demo QR -->
+            <div class="mt-16 animate-slide-up stagger-4">
+                <div onclick="openCustomerPage()" class="inline-block bg-white dark:bg-dark-800 p-6 rounded-3xl shadow-2xl border border-gray-100 dark:border-gray-700 cursor-pointer hover:shadow-nex-500/10 hover:-translate-y-2 transition-all duration-300">
+                    <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-4">📱 Demo Mağazayı Telefonunuzda Açın</p>
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://shopnex.io/s/demo&color=4f46e5" alt="ShopNex Demo QR" class="mx-auto rounded-xl" loading="lazy">
+                    <p class="text-xs text-gray-400 mt-3">QR'ı okutun veya tıklayın</p>
+                </div>
             </div>
         </div>
-        <h2 class="text-4xl md:text-5xl font-extrabold mb-6 anim" style="animation-delay:.1s">İşletmeni Dijitale Taşı,<br><span class="bg-gradient-to-r from-nex-600 to-purple-600 bg-clip-text text-transparent">Tek QR ile Tüm Ürünlerini Sun</span></h2>
-        <div class="flex flex-col md:flex-row gap-3 max-w-2xl mx-auto mb-8 anim" style="animation-delay:.2s">
-            <input type="text" id="aramaKutusu" placeholder="Ürün, marka veya kategori ara..." class="flex-1 px-6 py-4 text-lg border-2 border-gray-200 dark:border-gray-700 dark:bg-gray-800 rounded-full focus:outline-none focus:border-nex-500 shadow-sm">
-            <button onclick="anaArama()" class="px-8 py-4 bg-gray-800 dark:bg-gray-700 text-white text-lg font-semibold rounded-full hover:bg-gray-700 transition">Ara</button>
+    </section>
+
+    <!-- Özellikler -->
+    <section id="ozellikler" class="py-24 bg-white dark:bg-dark-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">Neden <span class="text-nex-600">ShopNex</span>?</h2>
+                <p class="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">İşletmeniz için ihtiyacınız olan her şey, tek platformda.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-dark-900 border border-gray-100 dark:border-gray-700 hover:border-nex-200 dark:hover:border-nex-700 hover:shadow-xl hover:shadow-nex-500/5 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-nex-100 dark:bg-nex-900/30 rounded-2xl flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">📱</div>
+                    <h3 class="text-xl font-bold mb-3">Tek QR Kod</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Ürünleriniz güncellense bile QR kodunuz asla değişmez. Bir kez oluşturun, sonsuza kadar kullanın.</p>
+                </div>
+                <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-dark-900 border border-gray-100 dark:border-gray-700 hover:border-nex-200 dark:hover:border-nex-700 hover:shadow-xl hover:shadow-nex-500/5 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-green-100 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">📦</div>
+                    <h3 class="text-xl font-bold mb-3">Kolay Ürün Yönetimi</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Fotoğraf, fiyat, stok, barkod — tüm ürün bilgilerinizi saniyeler içinde yönetin. CSV ile toplu aktarım.</p>
+                </div>
+                <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-dark-900 border border-gray-100 dark:border-gray-700 hover:border-nex-200 dark:hover:border-nex-700 hover:shadow-xl hover:shadow-nex-500/5 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-purple-100 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">📊</div>
+                    <h3 class="text-xl font-bold mb-3">Detaylı İstatistikler</h3>
+                    <p class="text-gray-600 dark:text-gray-400">QR kaç kez okutuldu, hangi ürünler popüler, hangi cihazlardan erişim var — hepsini görün.</p>
+                </div>
+                <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-dark-900 border border-gray-100 dark:border-gray-700 hover:border-nex-200 dark:hover:border-nex-700 hover:shadow-xl hover:shadow-nex-500/5 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">🎨</div>
+                    <h3 class="text-xl font-bold mb-3">Özelleştirilebilir QR</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Renk, logo, çerçeve — QR kodunuzu markanıza uygun şekilde tasarlayın. PNG, SVG, PDF indirin.</p>
+                </div>
+                <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-dark-900 border border-gray-100 dark:border-gray-700 hover:border-nex-200 dark:hover:border-nex-700 hover:shadow-xl hover:shadow-nex-500/5 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-red-100 dark:bg-red-900/30 rounded-2xl flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">🔒</div>
+                    <h3 class="text-xl font-bold mb-3">Güvenli Altyapı</h3>
+                    <p class="text-gray-600 dark:text-gray-400">HTTPS, CAPTCHA, XSS/CSRF koruması — verileriniz her zaman güvende.</p>
+                </div>
+                <div class="group p-8 rounded-3xl bg-gray-50 dark:bg-dark-900 border border-gray-100 dark:border-gray-700 hover:border-nex-200 dark:hover:border-nex-700 hover:shadow-xl hover:shadow-nex-500/5 hover:-translate-y-1 transition-all duration-300">
+                    <div class="w-14 h-14 bg-cyan-100 dark:bg-cyan-900/30 rounded-2xl flex items-center justify-center text-2xl mb-5 group-hover:scale-110 transition-transform">📱</div>
+                    <h3 class="text-xl font-bold mb-3">Tam Mobil Uyum</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Müşterileriniz telefon, tablet veya bilgisayardan mükemmel bir deneyim yaşar.</p>
+                </div>
+            </div>
         </div>
-        <button onclick="sayfaGoster('view-giris')" class="inline-block px-10 py-4 bg-gradient-to-r from-nex-600 to-purple-600 text-white text-xl font-bold rounded-full shadow-xl shadow-nex-600/30 hover:scale-105 transition anim" style="animation-delay:.3s">🚀 Ücretsiz Başla</button>
-        <div onclick="musteriSayfasiAc()" class="mt-14 bg-white dark:bg-gray-800 max-w-xs mx-auto p-6 rounded-3xl shadow-lg border dark:border-gray-700 cursor-pointer hover:shadow-xl hover:-translate-y-1 transition anim" style="animation-delay:.4s">
-            <p class="text-gray-500 dark:text-gray-400 font-medium mb-4 text-sm">📱 Demo Mağazayı Gör (QR Simülasyonu)</p>
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://shopnex.io/s/demo&color=4f46e5" class="mx-auto rounded-xl">
+    </section>
+
+    <!-- SSS -->
+    <section id="sss" class="py-24 bg-gray-50 dark:bg-dark-900">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">Sıkça Sorulan Sorular</h2>
+            </div>
+            <div class="space-y-4" id="faqContainer">
+                <div class="faq-item bg-white dark:bg-dark-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold hover:text-nex-600 transition">
+                        <span>ShopNex gerçekten ücretsiz mi?</span>
+                        <svg class="w-5 h-5 transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-6 text-gray-600 dark:text-gray-400">Evet! Temel plan tamamen ücretsizdir. Sınırsız ürün, tek QR kod ve temel istatistikler dahildir.</div>
+                </div>
+                <div class="faq-item bg-white dark:bg-dark-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold hover:text-nex-600 transition">
+                        <span>QR kodu ürünler güncellendiğinde değişir mi?</span>
+                        <svg class="w-5 h-5 transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-6 text-gray-600 dark:text-gray-400">Hayır! QR kodunuz sabittir. Ürünlerinizi istediğiniz zaman güncelleyin, QR kodunuz her zaman güncel ürünleri gösterir.</div>
+                </div>
+                <div class="faq-item bg-white dark:bg-dark-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold hover:text-nex-600 transition">
+                        <span>Toplu ürün ekleyebilir miyim?</span>
+                        <svg class="w-5 h-5 transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-6 text-gray-600 dark:text-gray-400">Evet! Excel veya CSV dosyanızı yükleyerek yüzlerce ürünü saniyeler içinde ekleyebilirsiniz.</div>
+                </div>
+                <div class="faq-item bg-white dark:bg-dark-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                    <button onclick="toggleFaq(this)" class="w-full flex justify-between items-center p-6 text-left font-bold hover:text-nex-600 transition">
+                        <span>Verilerim güvende mi?</span>
+                        <svg class="w-5 h-5 transition-transform faq-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+                    <div class="faq-answer hidden px-6 pb-6 text-gray-600 dark:text-gray-400">Kesinlikle! HTTPS şifreleme, CAPTCHA koruması, XSS/CSRF önlemleri ve düzenli yedekleme ile verileriniz her zaman güvende.</div>
+                </div>
+            </div>
         </div>
-    </header>
+    </section>
+
+    <!-- İletişim -->
+    <section id="iletisim" class="py-24 bg-white dark:bg-dark-800">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-4">İletişime Geçin</h2>
+                <p class="text-gray-600 dark:text-gray-400">Sorularınız mı var? Size yardımcı olmaktan memnuniyet duyarız.</p>
+            </div>
+            <form onsubmit="submitContact(event)" class="bg-gray-50 dark:bg-dark-900 p-8 rounded-3xl border border-gray-100 dark:border-gray-700">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">Ad Soyad</label><input type="text" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-800 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition" placeholder="Adınız"></div>
+                    <div><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">E-posta</label><input type="email" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-800 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition" placeholder="ornek@mail.com"></div>
+                </div>
+                <div class="mb-4"><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">Mesajınız</label><textarea rows="4" required class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-800 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition resize-none" placeholder="Mesajınızı yazın..."></textarea></div>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-nex-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-nex-500/25 transition-all">📨 Gönder</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 dark:bg-dark-950 text-gray-400 py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 bg-gradient-to-br from-nex-500 to-purple-600 rounded-lg flex items-center justify-center"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div>
+                        <span class="text-lg font-extrabold text-white">Shop<span class="text-nex-400">Nex</span></span>
+                    </div>
+                    <p class="text-sm">Akıllı ürün kataloğu ve QR kod yönetim sistemi. İşletmenizi dijitalleştirin.</p>
+                </div>
+                <div><h4 class="font-bold text-white mb-4">Ürün</h4><ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-nex-400 transition">Özellikler</a></li><li><a href="#" class="hover:text-nex-400 transition">Fiyatlandırma</a></li><li><a href="#" class="hover:text-nex-400 transition">API</a></li></ul></div>
+                <div><h4 class="font-bold text-white mb-4">Destek</h4><ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-nex-400 transition">Yardım Merkezi</a></li><li><a href="#" class="hover:text-nex-400 transition">İletişim</a></li><li><a href="#" class="hover:text-nex-400 transition">SSS</a></li></ul></div>
+                <div><h4 class="font-bold text-white mb-4">Yasal</h4><ul class="space-y-2 text-sm"><li><a href="#" class="hover:text-nex-400 transition">Gizlilik Politikası</a></li><li><a href="#" class="hover:text-nex-400 transition">Kullanım Şartları</a></li><li><a href="#" class="hover:text-nex-400 transition">KVKK</a></li></ul></div>
+            </div>
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm">© 2026 ShopNex. Tüm hakları saklıdır.</p>
+                <div class="flex gap-4"><a href="#" class="hover:text-nex-400 transition">Twitter</a><a href="#" class="hover:text-nex-400 transition">Instagram</a><a href="#" class="hover:text-nex-400 transition">LinkedIn</a></div>
+            </div>
+        </div>
+    </footer>
 </div>
 
-<!-- ==================== GİRİŞ + CAPTCHA ==================== -->
-<div id="view-giris" class="view">
-    <div class="flex items-center justify-center min-h-[85vh] px-4">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-3xl shadow-2xl w-full max-w-md anim">
-            <div class="text-center mb-6">
-                <div class="w-14 h-14 bg-gradient-to-br from-nex-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg"><svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div>
-                <h2 class="text-2xl font-extrabold">Shop<span class="text-nex-600">Nex</span></h2>
+<!-- ===== SAYFA: GİRİŞ ===== -->
+<div id="page-login" class="page">
+    <div class="min-h-screen flex items-center justify-center px-4 pt-16">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-gradient-to-br from-nex-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-nex-500/25"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div>
+                <h2 class="text-2xl font-extrabold">Tekrar Hoş Geldiniz</h2>
+                <p class="text-gray-500 dark:text-gray-400 mt-2">Hesabınıza giriş yapın</p>
             </div>
-            <div class="flex border-b dark:border-gray-700 mb-6">
-                <button id="tab-giris" onclick="sekme('giris')" class="flex-1 py-2 font-semibold text-nex-600 border-b-2 border-nex-600">Giriş Yap</button>
-                <button id="tab-kayit" onclick="sekme('kayit')" class="flex-1 py-2 font-semibold text-gray-400">Kayıt Ol</button>
-            </div>
-            <form onsubmit="girisYap(event)">
-                <div id="alan-isletme" class="hidden mb-4"><input type="text" placeholder="İşletme Adı" class="w-full px-4 py-3 border dark:border-gray-600 dark:bg-gray-700 rounded-xl outline-nex-500"></div>
-                <div class="mb-4"><input type="email" required placeholder="E-posta" class="w-full px-4 py-3 border dark:border-gray-600 dark:bg-gray-700 rounded-xl outline-nex-500"></div>
-                <div class="mb-4"><input type="password" required placeholder="Şifre" class="w-full px-4 py-3 border dark:border-gray-600 dark:bg-gray-700 rounded-xl outline-nex-500"></div>
-                <div class="mb-4 bg-gray-50 dark:bg-gray-700 p-4 rounded-xl border dark:border-gray-600">
+            <form onsubmit="handleLogin(event)" class="bg-white dark:bg-dark-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+                <div class="mb-5"><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">E-posta</label><input type="email" required class="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition" placeholder="ornek@isletme.com"></div>
+                <div class="mb-5"><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">Şifre</label><input type="password" required class="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition" placeholder="••••••••"></div>
+                <!-- CAPTCHA -->
+                <div class="mb-5 bg-gray-50 dark:bg-dark-900 p-4 rounded-xl border border-gray-200 dark:border-gray-600">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3"><input type="checkbox" id="captcha-check" class="w-6 h-6 accent-nex-600 cursor-pointer"><label for="captcha-check" class="text-sm font-medium">Ben robot değilim</label></div>
-                        <div class="text-2xl">🛡️</div>
+                        <div class="flex items-center gap-3"><input type="checkbox" id="loginCaptcha" onchange="showCaptchaMath()" class="w-5 h-5 accent-nex-600 rounded cursor-pointer"><label for="loginCaptcha" class="text-sm font-medium cursor-pointer">Ben robot değilim</label></div>
+                        <span class="text-xl">🛡️</span>
                     </div>
-                    <div id="captcha-math" class="hidden mt-3"><p class="text-sm text-gray-500 mb-1">Doğrulama: <b id="captcha-soru"></b></p><input type="text" id="captcha-cevap" placeholder="Cevap" class="w-full px-3 py-2 border dark:border-gray-600 dark:bg-gray-800 rounded-lg text-sm outline-nex-500"></div>
+                    <div id="captchaMath" class="hidden mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                        <p class="text-sm text-gray-500 mb-2">Doğrulama: <b id="captchaQuestion" class="text-nex-600"></b></p>
+                        <input type="text" id="captchaAnswer" class="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 dark:bg-dark-800 text-sm outline-nex-500" placeholder="Cevabınız">
+                    </div>
                 </div>
-                <button type="submit" class="w-full bg-gradient-to-r from-nex-600 to-purple-600 text-white font-bold py-3 rounded-full hover:opacity-90 mb-4 transition shadow-lg">Devam Et</button>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-nex-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-nex-500/25 transition-all mb-4">Giriş Yap</button>
+                <div class="text-center mb-4"><button type="button" onclick="navigate('forgot')" class="text-sm text-nex-600 hover:underline font-medium">Şifremi Unuttum?</button></div>
+                <div class="relative my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-gray-200 dark:border-gray-600"></div></div><div class="relative flex justify-center"><span class="px-3 bg-white dark:bg-dark-800 text-sm text-gray-400">veya</span></div></div>
+                <button type="button" onclick="handleLogin(event)" class="w-full flex items-center justify-center gap-3 py-3.5 border border-gray-200 dark:border-gray-600 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-dark-900 transition">
+                    <svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.7l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
+                    Google ile Giriş
+                </button>
             </form>
-            <div class="text-center mb-4"><button onclick="toast('📧 Şifre sıfırlama bağlantısı gönderildi!')" class="text-sm text-nex-500 hover:underline">Şifremi Unuttum?</button></div>
-            <button onclick="girisYap(event)" class="w-full flex items-center justify-center gap-3 border dark:border-gray-600 py-3 rounded-full font-semibold hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.3 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.7l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.6-.4-3.9z"/></svg>
-                Google ile Giriş
-            </button>
+            <p class="text-center mt-6 text-sm text-gray-500">Hesabınız yok mu? <button onclick="navigate('register')" class="text-nex-600 font-bold hover:underline">Kayıt Olun</button></p>
         </div>
     </div>
 </div>
 
-<!-- ==================== PANEL ==================== -->
-<div id="view-panel" class="view">
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">📊 Kontrol Paneli</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm anim"><p class="text-2xl font-extrabold text-nex-600" id="istatistik-urun">0</p><p class="text-xs text-gray-500 font-bold mt-1">Toplam Ürün</p></div>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm anim" style="animation-delay:.1s"><p class="text-2xl font-extrabold text-green-600">12</p><p class="text-xs text-gray-500 font-bold mt-1">Aktif QR</p></div>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm anim" style="animation-delay:.2s"><p class="text-2xl font-extrabold text-purple-600">3.452</p><p class="text-xs text-gray-500 font-bold mt-1">Görüntülenme</p></div>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm anim" style="animation-delay:.3s"><p class="text-2xl font-extrabold text-red-500" id="panel-fav">0</p><p class="text-xs text-gray-500 font-bold mt-1">❤️ Favori</p></div>
+<!-- ===== SAYFA: KAYIT ===== -->
+<div id="page-register" class="page">
+    <div class="min-h-screen flex items-center justify-center px-4 pt-16">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-gradient-to-br from-nex-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-nex-500/25"><svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg></div>
+                <h2 class="text-2xl font-extrabold">Ücretsiz Hesap Oluşturun</h2>
+                <p class="text-gray-500 dark:text-gray-400 mt-2">30 saniyede başlayın</p>
+            </div>
+            <form onsubmit="handleRegister(event)" class="bg-white dark:bg-dark-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+                <div class="mb-4"><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">İşletme Adı</label><input type="text" required class="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition" placeholder="İşletmenizin adı"></div>
+                <div class="mb-4"><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">E-posta</label><input type="email" required class="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition" placeholder="ornek@isletme.com"></div>
+                <div class="mb-4"><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">Şifre</label><input type="password" required minlength="6" class="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition" placeholder="Min. 6 karakter"></div>
+                <div class="mb-6"><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">Şifre Tekrar</label><input type="password" required class="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition" placeholder="Şifrenizi tekrar girin"></div>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-nex-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-nex-500/25 transition-all">🚀 Hesap Oluştur</button>
+            </form>
+            <p class="text-center mt-6 text-sm text-gray-500">Zaten hesabınız var mı? <button onclick="navigate('login')" class="text-nex-600 font-bold hover:underline">Giriş Yapın</button></p>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden">
-            <div class="px-6 py-4 border-b dark:border-gray-700 flex justify-between items-center"><h3 class="font-bold">Son Eklenen Ürünler</h3><button onclick="sayfaGoster('view-urunler')" class="text-nex-600 text-sm font-bold hover:underline">Tümünü Yönet ➔</button></div>
-            <div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-sm"><tr><th class="px-6 py-3">Ürün</th><th class="px-6 py-3">Fiyat</th><th class="px-6 py-3">Stok</th><th class="px-6 py-3">Durum</th></tr></thead><tbody id="panel-urun-tablosu" class="divide-y dark:divide-gray-700 text-sm"></tbody></table></div>
-        </div>
-    </main>
+    </div>
 </div>
 
-<!-- ==================== ÜRÜN YÖNETİMİ ==================== -->
-<div id="view-urunler" class="view">
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
-            <h2 class="text-2xl font-bold">📦 Ürün Yönetimi</h2>
-            <div class="flex flex-wrap gap-2">
-                <label class="bg-gray-700 text-white px-4 py-2 rounded-full text-xs font-bold cursor-pointer hover:bg-gray-800">📥 CSV İçe<input type="file" class="hidden" onchange="csvIceAktar(this)"></label>
-                <button onclick="csvDisaAktar()" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-full text-xs font-bold hover:bg-gray-300">📤 CSV Dışa</button>
-                <button onclick="modalAc()" class="bg-nex-600 text-white px-5 py-2 rounded-full text-xs font-bold hover:bg-nex-700 shadow-lg shadow-nex-600/25">+ Yeni Ürün</button>
+<!-- ===== SAYFA: ŞİFRE SIFIRLAMA ===== -->
+<div id="page-forgot" class="page">
+    <div class="min-h-screen flex items-center justify-center px-4 pt-16">
+        <div class="w-full max-w-md text-center">
+            <div class="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-2xl flex items-center justify-center mx-auto mb-4 text-3xl">🔑</div>
+            <h2 class="text-2xl font-extrabold mb-2">Şifre Sıfırlama</h2>
+            <p class="text-gray-500 dark:text-gray-400 mb-8">E-posta adresinize sıfırlama bağlantısı göndereceğiz.</p>
+            <form onsubmit="handleForgot(event)" class="bg-white dark:bg-dark-800 p-8 rounded-3xl shadow-xl border border-gray-100 dark:border-gray-700">
+                <input type="email" required class="w-full px-4 py-3.5 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 focus:ring-2 focus:ring-nex-500/20 transition mb-4" placeholder="E-posta adresiniz">
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-orange-500 to-red-500 text-white font-bold rounded-xl hover:shadow-lg transition-all">📨 Bağlantı Gönder</button>
+            </form>
+            <p class="mt-6 text-sm text-gray-500"><button onclick="navigate('login')" class="text-nex-600 font-bold hover:underline">← Girişe Dön</button></p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SAYFA: KONTROL PANELİ ===== -->
+<div id="page-dashboard" class="page">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <div class="flex justify-between items-center mb-8">
+            <div><h2 class="text-2xl font-extrabold">Kontrol Paneli</h2><p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Hoş geldiniz! İşte işletmenizin özeti.</p></div>
+            <button onclick="navigate('products')" class="px-5 py-2.5 bg-nex-600 text-white text-sm font-bold rounded-xl hover:bg-nex-700 transition shadow-lg shadow-nex-500/25">+ Ürün Ekle</button>
+        </div>
+        <!-- İstatistik Kartları -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                <div class="flex items-center justify-between mb-3"><span class="text-2xl">📦</span><span class="text-xs font-bold text-green-500 bg-green-50 dark:bg-green-900/20 px-2 py-1 rounded-full">+3 bugün</span></div>
+                <p class="text-3xl font-extrabold" id="statProducts">0</p>
+                <p class="text-sm text-gray-500 font-medium mt-1">Toplam Ürün</p>
+            </div>
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                <div class="flex items-center justify-between mb-3"><span class="text-2xl">📂</span></div>
+                <p class="text-3xl font-extrabold" id="statCategories">0</p>
+                <p class="text-sm text-gray-500 font-medium mt-1">Kategori</p>
+            </div>
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                <div class="flex items-center justify-between mb-3"><span class="text-2xl">📱</span><span class="text-xs font-bold text-nex-500 bg-nex-50 dark:bg-nex-900/20 px-2 py-1 rounded-full">+12%</span></div>
+                <p class="text-3xl font-extrabold" id="statScans">0</p>
+                <p class="text-sm text-gray-500 font-medium mt-1">QR Okutulma</p>
+            </div>
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 hover:shadow-lg transition-shadow">
+                <div class="flex items-center justify-between mb-3"><span class="text-2xl">❤️</span></div>
+                <p class="text-3xl font-extrabold" id="statFavs">0</p>
+                <p class="text-sm text-gray-500 font-medium mt-1">Favori</p>
             </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left min-w-[900px]"><thead class="bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-300 text-xs uppercase"><tr><th class="px-4 py-3">Foto</th><th class="px-4 py-3">Ürün</th><th class="px-4 py-3">Marka</th><th class="px-4 py-3">Fiyat</th><th class="px-4 py-3">İndirim</th><th class="px-4 py-3">Stok</th><th class="px-4 py-3">SKU</th><th class="px-4 py-3">Birim</th><th class="px-4 py-3">Durum</th><th class="px-4 py-3">Paylaş</th></tr></thead><tbody id="urun-tablosu" class="divide-y dark:divide-gray-700 text-sm"></tbody></table></div></div>
-    </main>
+        <!-- Son Ürünler & İşlemler -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white dark:bg-dark-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center"><h3 class="font-bold">Son Eklenen Ürünler</h3><button onclick="navigate('products')" class="text-nex-600 text-sm font-bold hover:underline">Tümü →</button></div>
+                <div id="recentProducts" class="divide-y divide-gray-50 dark:divide-gray-700"></div>
+            </div>
+            <div class="bg-white dark:bg-dark-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div class="px-6 py-4 border-b border-gray-100 dark:border-gray-700"><h3 class="font-bold">Son İşlemler</h3></div>
+                <div id="recentActions" class="p-4 space-y-3"></div>
+            </div>
+        </div>
+    </div>
 </div>
 
-<!-- ÜRÜN MODALI -->
-<div id="urun-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white dark:bg-gray-800 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-6 anim">
-        <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold">Yeni Ürün Ekle</h3><button onclick="modalKapat()" class="text-gray-400 text-2xl hover:text-red-500">&times;</button></div>
-        <form onsubmit="urunKaydet(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="md:col-span-2"><label class="text-xs font-bold text-gray-500">Ürün Adı *</label><input id="f-ad" required class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></div>
-            <div class="md:col-span-2"><label class="text-xs font-bold text-gray-500">Fotoğraf</label><input type="file" id="f-foto" accept="image/*" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-1.5 mt-1"></div>
-            <div><label class="text-xs font-bold text-gray-500">Fiyat *</label><input id="f-fiyat" type="number" step="0.01" required class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></div>
-            <div><label class="text-xs font-bold text-gray-500">İndirimli Fiyat</label><input id="f-indirim" type="number" step="0.01" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></div>
-            <div><label class="text-xs font-bold text-gray-500">Stok</label><input id="f-stok" type="number" value="0" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></div>
-            <div><label class="text-xs font-bold text-gray-500">Birim</label><select id="f-birim" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1"><option>Adet</option><option>Kg</option><option>Lt</option><option>Porsiyon</option></select></div>
-            <div><label class="text-xs font-bold text-gray-500">Barkod</label><input id="f-barkod" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></div>
-            <div><label class="text-xs font-bold text-gray-500">SKU</label><input id="f-sku" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></div>
-            <div><label class="text-xs font-bold text-gray-500">Marka</label><input id="f-marka" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></div>
-            <div><label class="text-xs font-bold text-gray-500">Kategori</label><input id="f-kategori" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></div>
-            <div class="md:col-span-2"><label class="text-xs font-bold text-gray-500">Açıklama</label><textarea id="f-aciklama" rows="2" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 outline-nex-500"></textarea></div>
-            <div class="md:col-span-2 flex items-center gap-3 bg-gray-50 dark:bg-gray-700 p-3 rounded-xl"><input type="checkbox" id="f-durum" checked class="w-5 h-5 accent-nex-600"><label class="font-semibold text-sm">Aktif</label></div>
-            <button type="submit" class="md:col-span-2 bg-gradient-to-r from-nex-600 to-purple-600 text-white font-bold py-3 rounded-full hover:opacity-90 shadow-lg">Kaydet</button>
+<!-- ===== SAYFA: ÜRÜN YÖNETİMİ ===== -->
+<div id="page-products" class="page">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+            <h2 class="text-2xl font-extrabold">📦 Ürün Yönetimi</h2>
+            <div class="flex flex-wrap gap-2">
+                <label class="px-4 py-2.5 bg-gray-700 text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-gray-800 transition">📥 CSV İçe Aktar<input type="file" accept=".csv" class="hidden" onchange="importCSV(this)"></label>
+                <button onclick="exportCSV()" class="px-4 py-2.5 bg-gray-200 dark:bg-gray-700 text-xs font-bold rounded-xl hover:bg-gray-300 dark:hover:bg-gray-600 transition">📤 CSV Dışa Aktar</button>
+                <button onclick="openProductModal()" class="px-5 py-2.5 bg-nex-600 text-white text-xs font-bold rounded-xl hover:bg-nex-700 transition shadow-lg shadow-nex-500/25">+ Yeni Ürün</button>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-dark-800 rounded-2xl border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left min-w-[800px]">
+                    <thead class="bg-gray-50 dark:bg-dark-900 text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wider">
+                        <tr><th class="px-5 py-4">Ürün</th><th class="px-5 py-4">Kategori</th><th class="px-5 py-4">Fiyat</th><th class="px-5 py-4">Stok</th><th class="px-5 py-4">SKU</th><th class="px-5 py-4">Durum</th><th class="px-5 py-4">İşlem</th></tr>
+                    </thead>
+                    <tbody id="productTable" class="divide-y divide-gray-50 dark:divide-gray-700 text-sm"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SAYFA: FAVORİLER ===== -->
+<div id="page-favorites" class="page">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <h2 class="text-2xl font-extrabold mb-8">❤️ Favori Ürünlerim</h2>
+        <div id="favEmpty" class="hidden text-center py-20"><p class="text-6xl mb-4">💔</p><p class="text-gray-500 font-bold text-lg">Henüz favori ürününüz yok</p><p class="text-gray-400 text-sm mt-2">Müşteri menüsünden kalp butonuna tıklayarak ekleyin</p><button onclick="openCustomerPage()" class="mt-6 px-6 py-3 bg-nex-600 text-white rounded-xl font-bold hover:bg-nex-700 transition">🛍️ Mağazaya Git</button></div>
+        <div id="favGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+    </div>
+</div>
+
+<!-- ===== SAYFA: QR KOD ===== -->
+<div id="page-qr" class="page">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <h2 class="text-2xl font-extrabold mb-2">📱 QR Kod Sistemi</h2>
+        <p class="text-gray-500 dark:text-gray-400 mb-8">Tek QR kod — ürünler güncellense bile QR asla değişmez.</p>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <!-- Ayarlar -->
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 space-y-6">
+                <div><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">🎨 QR Rengi</label><input type="color" id="qrColor" value="#4f46e5" oninput="updateQR()" class="w-full h-12 rounded-xl cursor-pointer border border-gray-200 dark:border-gray-600 p-1"></div>
+                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-900 rounded-xl"><label class="text-sm font-bold">🛍️ Logo Ekle</label><input type="checkbox" id="qrLogo" onchange="updateQR()" class="w-5 h-5 accent-nex-600 cursor-pointer"></div>
+                <div><label class="block text-sm font-bold text-gray-600 dark:text-gray-400 mb-2">🖼️ Çerçeve</label>
+                    <select id="qrFrame" onchange="updateQR()" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm">
+                        <option value="qr-frame-none">Çerçevesiz</option><option value="qr-frame-thin">İnce Siyah</option><option value="qr-frame-thick">Kalın Renkli</option><option value="qr-frame-rounded">Yuvarlak Yeşil</option>
+                    </select>
+                </div>
+                <button onclick="openCustomerPage()" class="w-full py-3.5 bg-green-500 text-white font-bold rounded-xl hover:bg-green-600 transition">📱 Müşteri Görünümünü Test Et</button>
+            </div>
+            <!-- Önizleme -->
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 text-center">
+                <h3 class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Canlı Önizleme</h3>
+                <div id="qrBox" class="relative inline-block p-5 bg-white qr-frame-none shadow-inner rounded-2xl mb-6">
+                    <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://shopnex.io/s/demo&color=4f46e5" class="w-60 h-60 mx-auto" alt="QR Kod">
+                    <div id="qrLogoEl" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-lg"><div class="w-8 h-8 bg-gradient-to-br from-nex-500 to-purple-600 rounded-lg flex items-center justify-center"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div></div>
+                </div>
+                <div id="print-area" class="hidden"><img id="printQr" src="" class="w-64 h-64 mx-auto"></div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="downloadQR('png')" class="py-3 bg-gray-800 text-white rounded-xl font-bold text-sm hover:bg-black transition">⬇️ PNG</button>
+                    <button onclick="downloadQR('svg')" class="py-3 bg-gray-800 text-white rounded-xl font-bold text-sm hover:bg-black transition">⬇️ SVG</button>
+                    <button onclick="downloadQR('pdf')" class="py-3 bg-red-500 text-white rounded-xl font-bold text-sm hover:bg-red-600 transition">📄 PDF</button>
+                    <button onclick="printQR()" class="py-3 bg-blue-500 text-white rounded-xl font-bold text-sm hover:bg-blue-600 transition">🖨️ Yazdır</button>
+                </div>
+                <button onclick="shareQR()" class="w-full mt-3 py-3 bg-green-500 text-white rounded-xl font-bold text-sm hover:bg-green-600 transition">📲 Paylaş</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SAYFA: MÜŞTERİ ===== -->
+<div id="page-customer" class="page">
+    <div class="min-h-screen bg-gray-50 dark:bg-dark-900">
+        <!-- Müşteri Header -->
+        <div class="bg-white dark:bg-dark-800 shadow-sm sticky top-0 z-40 p-4 text-center relative">
+            <button onclick="navigate('dashboard')" class="absolute left-4 top-1/2 -translate-y-1/2 text-xs bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-full font-bold text-gray-500 hover:bg-gray-200 transition">← Panel</button>
+            <button onclick="toggleTheme()" class="absolute right-4 top-1/2 -translate-y-1/2 text-lg">🌙</button>
+            <div class="flex items-center justify-center gap-2">
+                <div class="w-7 h-7 bg-gradient-to-br from-nex-500 to-purple-600 rounded-lg flex items-center justify-center"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div>
+                <h2 class="text-lg font-extrabold">Shop<span class="text-nex-600">Nex</span> Mağaza</h2>
+            </div>
+            <p class="text-[10px] text-gray-400 font-bold tracking-widest uppercase mt-1">Powered by ShopNex</p>
+        </div>
+        <!-- Reklam Banner -->
+        <div class="max-w-5xl mx-auto px-4 mt-4"><div class="bg-gradient-to-r from-nex-500 to-purple-600 text-white p-3.5 rounded-2xl text-center text-sm font-bold cursor-pointer hover:opacity-90 transition">🛍️ Yaz Kampanyası! Tüm ürünlerde %20 indirim →</div></div>
+        <!-- Filtreler -->
+        <div class="max-w-5xl mx-auto px-4 mt-4">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" id="custSearch" onkeyup="renderCustomerProducts()" placeholder="🔍 Ürün ara..." class="flex-1 px-5 py-3 rounded-full border border-gray-200 dark:border-gray-700 dark:bg-dark-800 outline-nex-500 shadow-sm text-sm">
+                <select id="custCategory" onchange="renderCustomerProducts()" class="px-5 py-3 rounded-full border border-gray-200 dark:border-gray-700 dark:bg-dark-800 outline-nex-500 shadow-sm text-sm font-medium"></select>
+                <select id="custSort" onchange="renderCustomerProducts()" class="px-5 py-3 rounded-full border border-gray-200 dark:border-gray-700 dark:bg-dark-800 outline-nex-500 shadow-sm text-sm font-medium"><option value="default">Sırala</option><option value="asc">Fiyat ↑</option><option value="desc">Fiyat ↓</option></select>
+            </div>
+        </div>
+        <!-- Ürün Grid -->
+        <div class="max-w-5xl mx-auto px-4 py-6"><div id="customerGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div></div>
+    </div>
+</div>
+
+<!-- ===== SAYFA: İSTATİSTİK ===== -->
+<div id="page-stats" class="page">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <h2 class="text-2xl font-extrabold mb-8">📈 İstatistikler</h2>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 text-center"><p class="text-3xl font-extrabold text-nex-600" id="istTotal">0</p><p class="text-xs text-gray-500 font-bold mt-2">Toplam QR Okutma</p></div>
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 text-center"><p class="text-3xl font-extrabold text-blue-500" id="istDaily">0</p><p class="text-xs text-gray-500 font-bold mt-2">Günlük</p></div>
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 text-center"><p class="text-3xl font-extrabold text-purple-500">1.240</p><p class="text-xs text-gray-500 font-bold mt-2">Haftalık</p></div>
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-2xl border border-gray-100 dark:border-gray-700 text-center"><p class="text-3xl font-extrabold text-pink-500">5.830</p><p class="text-xs text-gray-500 font-bold mt-2">Aylık</p></div>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700">
+                <h3 class="font-bold text-sm text-gray-500 uppercase mb-4">🏆 En Çok Görüntülenen Ürünler</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4"><span class="text-lg font-black text-nex-600">1</span><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=60" class="w-12 h-12 rounded-xl object-cover"><div class="flex-1"><p class="font-bold text-sm">Filtre Kahve</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 mt-1"><div class="bg-nex-500 h-2 rounded-full" style="width:85%"></div></div></div><span class="text-sm font-bold text-gray-500">1.204</span></div>
+                    <div class="flex items-center gap-4"><span class="text-lg font-black text-gray-400">2</span><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=60" class="w-12 h-12 rounded-xl object-cover"><div class="flex-1"><p class="font-bold text-sm">Hamburger</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 mt-1"><div class="bg-purple-500 h-2 rounded-full" style="width:62%"></div></div></div><span class="text-sm font-bold text-gray-500">876</span></div>
+                    <div class="flex items-center gap-4"><span class="text-lg font-black text-gray-400">3</span><img src="https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=60" class="w-12 h-12 rounded-xl object-cover"><div class="flex-1"><p class="font-bold text-sm">Cheesecake</p><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-2 mt-1"><div class="bg-pink-500 h-2 rounded-full" style="width:45%"></div></div></div><span class="text-sm font-bold text-gray-500">634</span></div>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-dark-800 p-6 rounded-3xl border border-gray-100 dark:border-gray-700">
+                <h3 class="font-bold text-sm text-gray-500 uppercase mb-4">📱 Cihaz Dağılımı</h3>
+                <div class="space-y-4">
+                    <div><div class="flex justify-between text-sm font-bold mb-2"><span>📱 Mobil</span><span id="mobilePercent">%</span></div><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3"><div id="mobileBar" class="bg-green-500 h-3 rounded-full transition-all duration-700" style="width:0%"></div></div></div>
+                    <div><div class="flex justify-between text-sm font-bold mb-2"><span>💻 Masaüstü</span><span id="desktopPercent">%</span></div><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3"><div id="desktopBar" class="bg-blue-500 h-3 rounded-full transition-all duration-700" style="width:0%"></div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SAYFA: YÖNETİCİ PANELİ ===== -->
+<div id="page-admin" class="page">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <h2 class="text-2xl font-extrabold mb-8">⚙️ Yönetici Paneli</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Kullanıcı Yönetimi -->
+            <div class="lg:col-span-2 bg-white dark:bg-dark-800 rounded-3xl border border-gray-100 dark:border-gray-700 p-6">
+                <h3 class="font-bold text-lg mb-4">👥 Kullanıcı Yönetimi</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-900 rounded-xl"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-nex-600 rounded-full flex items-center justify-center text-white font-bold text-sm">AY</div><div><p class="font-bold text-sm">Ahmet Yılmaz</p><p class="text-xs text-gray-500">Yönetici • ahmet@shopnex.io</p></div></div><span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold">Aktif</span></div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-900 rounded-xl"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">EK</div><div><p class="font-bold text-sm">Elif Kaya</p><p class="text-xs text-gray-500">Editör • elif@shopnex.io</p></div></div><span class="bg-green-100 text-green-700 text-xs px-2.5 py-1 rounded-full font-bold">Aktif</span></div>
+                    <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-dark-900 rounded-xl"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-gray-400 rounded-full flex items-center justify-center text-white font-bold text-sm">MD</div><div><p class="font-bold text-sm">Mehmet Demir</p><p class="text-xs text-gray-500">Görüntüleyici • mehmet@shopnex.io</p></div></div><span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold">Pasif</span></div>
+                </div>
+            </div>
+            <!-- Site Ayarları & Destek -->
+            <div class="space-y-6">
+                <div class="bg-white dark:bg-dark-800 rounded-3xl border border-gray-100 dark:border-gray-700 p-6">
+                    <h3 class="font-bold text-lg mb-4">🏢 İşletme Bilgileri</h3>
+                    <div class="space-y-3">
+                        <div><label class="text-xs font-bold text-gray-500">İşletme Adı</label><input value="ShopNex Demo Mağaza" class="w-full px-3 py-2.5 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 text-sm outline-nex-500"></div>
+                        <div><label class="text-xs font-bold text-gray-500">Slogan</label><input value="En iyi ürünler, en iyi fiyat" class="w-full px-3 py-2.5 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 text-sm outline-nex-500"></div>
+                        <button onclick="showToast('success','✅ İşletme bilgileri kaydedildi!')" class="w-full py-2.5 bg-nex-600 text-white rounded-xl text-sm font-bold hover:bg-nex-700 transition">Kaydet</button>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-800 rounded-3xl border border-gray-100 dark:border-gray-700 p-6">
+                    <h3 class="font-bold text-lg mb-4">🎫 Destek Talepleri</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl"><span>QR kod baskı sorunu</span><span class="text-yellow-600 font-bold text-xs">Açık</span></div>
+                        <div class="flex justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-xl"><span>CSV aktarım hatası</span><span class="text-green-600 font-bold text-xs">Çözüldü</span></div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-dark-800 rounded-3xl border border-gray-100 dark:border-gray-700 p-6">
+                    <h3 class="font-bold text-lg mb-4">📢 Reklam Yönetimi</h3>
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-dark-900 rounded-xl"><span>Yaz Kampanyası Banner</span><span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full font-bold">Aktif</span></div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-dark-900 rounded-xl"><span>İndirim Popup</span><span class="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded-full font-bold">Pasif</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Güvenlik -->
+        <div class="mt-6 bg-white dark:bg-dark-800 rounded-3xl border border-gray-100 dark:border-gray-700 p-6">
+            <h3 class="font-bold text-lg mb-4">🔒 Güvenlik Durumu</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl text-center"><p class="text-2xl mb-1">🔒</p><p class="text-xs font-bold text-green-700 dark:text-green-400">HTTPS Aktif</p></div>
+                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl text-center"><p class="text-2xl mb-1">🛡️</p><p class="text-xs font-bold text-green-700 dark:text-green-400">CAPTCHA Aktif</p></div>
+                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl text-center"><p class="text-2xl mb-1">🚫</p><p class="text-xs font-bold text-green-700 dark:text-green-400">XSS Koruması</p></div>
+                <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-xl text-center"><p class="text-2xl mb-1">🔐</p><p class="text-xs font-bold text-green-700 dark:text-green-400">CSRF Token</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== SAYFA: PROFİL ===== -->
+<div id="page-profile" class="page">
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-12">
+        <h2 class="text-2xl font-extrabold mb-8">👤 Profil Düzenleme</h2>
+        <div class="bg-white dark:bg-dark-800 rounded-3xl border border-gray-100 dark:border-gray-700 p-8">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="w-20 h-20 bg-gradient-to-br from-nex-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold">SN</div>
+                <div><p class="font-bold text-lg">ShopNex Kullanıcısı</p><p class="text-sm text-gray-500">admin@shopnex.io</p></div>
+            </div>
+            <form onsubmit="saveProfile(event)" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div><label class="text-xs font-bold text-gray-500">Ad Soyad</label><input value="ShopNex Admin" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+                    <div><label class="text-xs font-bold text-gray-500">E-posta</label><input type="email" value="admin@shopnex.io" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+                </div>
+                <div><label class="text-xs font-bold text-gray-500">İşletme Adı</label><input value="ShopNex Demo Mağaza" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+                <div><label class="text-xs font-bold text-gray-500">Telefon</label><input value="+90 555 123 4567" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+                <div><label class="text-xs font-bold text-gray-500">Adres</label><textarea rows="2" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm resize-none">İstanbul, Türkiye</textarea></div>
+                <button type="submit" class="w-full py-4 bg-gradient-to-r from-nex-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg hover:shadow-nex-500/25 transition-all">💾 Profili Kaydet</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL: ÜRÜN EKLE/DÜZENLE ===== -->
+<div id="productModal" class="modal-overlay">
+    <div class="modal-content bg-white dark:bg-dark-800 rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8">
+        <div class="flex justify-between items-center mb-6"><h3 class="text-xl font-extrabold" id="modalTitle">Yeni Ürün Ekle</h3><button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-red-100 hover:text-red-500 transition">&times;</button></div>
+        <form onsubmit="saveProduct(event)" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2"><label class="text-xs font-bold text-gray-500">Ürün Adı *</label><input id="pName" required class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+            <div class="md:col-span-2"><label class="text-xs font-bold text-gray-500">Fotoğraf</label><input type="file" id="pPhoto" accept="image/*" class="w-full px-4 py-2 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 text-sm"></div>
+            <div><label class="text-xs font-bold text-gray-500">Fiyat (₺) *</label><input id="pPrice" type="number" step="0.01" required class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+            <div><label class="text-xs font-bold text-gray-500">İndirimli Fiyat</label><input id="pDiscount" type="number" step="0.01" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+            <div><label class="text-xs font-bold text-gray-500">Stok</label><input id="pStock" type="number" value="0" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+            <div><label class="text-xs font-bold text-gray-500">Birim</label><select id="pUnit" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"><option>Adet</option><option>Kg</option><option>Lt</option><option>Porsiyon</option><option>Kutu</option></select></div>
+            <div><label class="text-xs font-bold text-gray-500">Barkod</label><input id="pBarcode" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+            <div><label class="text-xs font-bold text-gray-500">SKU</label><input id="pSku" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+            <div><label class="text-xs font-bold text-gray-500">Marka</label><input id="pBrand" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+            <div><label class="text-xs font-bold text-gray-500">Kategori</label><input id="pCategory" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm"></div>
+            <div class="md:col-span-2"><label class="text-xs font-bold text-gray-500">Açıklama</label><textarea id="pDesc" rows="2" class="w-full px-4 py-3 mt-1 rounded-xl border border-gray-200 dark:border-gray-600 dark:bg-dark-900 outline-nex-500 text-sm resize-none"></textarea></div>
+            <div class="md:col-span-2 flex items-center gap-3 p-4 bg-gray-50 dark:bg-dark-900 rounded-xl"><input type="checkbox" id="pActive" checked class="w-5 h-5 accent-nex-600"><label class="text-sm font-bold">Aktif (Müşteriye görünür)</label></div>
+            <button type="submit" class="md:col-span-2 py-4 bg-gradient-to-r from-nex-600 to-purple-600 text-white font-bold rounded-xl hover:shadow-lg transition-all">💾 Kaydet</button>
         </form>
     </div>
 </div>
 
-<!-- ==================== FAVORİLER ==================== -->
-<div id="view-favoriler" class="view">
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">❤️ Favori Ürünlerim</h2>
-        <div id="favoriler-bos" class="hidden text-center py-20">
-            <p class="text-6xl mb-4">💔</p>
-            <p class="text-gray-500 font-bold text-lg">Henüz favori ürününüz yok</p>
-            <p class="text-gray-400 text-sm mt-2">Müşteri menüsünden 🤍 butonuna tıklayarak ekleyin</p>
-            <button onclick="musteriSayfasiAc()" class="mt-4 bg-nex-600 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-nex-700">🛍️ Mağazaya Git</button>
+<!-- ===== MODAL: PAYLAŞ ===== -->
+<div id="shareModal" class="modal-overlay">
+    <div class="modal-content bg-white dark:bg-dark-800 rounded-3xl w-full max-w-sm p-8 text-center">
+        <h3 class="text-lg font-extrabold mb-2">📤 Ürünü Paylaş</h3>
+        <p id="shareProductName" class="text-sm text-gray-500 mb-6"></p>
+        <div class="grid grid-cols-4 gap-3 mb-6">
+            <button onclick="doShare('whatsapp')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition"><span class="text-2xl">💬</span><span class="text-[10px] font-bold">WhatsApp</span></button>
+            <button onclick="doShare('twitter')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><span class="text-2xl">🐦</span><span class="text-[10px] font-bold">Twitter</span></button>
+            <button onclick="doShare('telegram')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-sky-50 dark:hover:bg-sky-900/20 transition"><span class="text-2xl">✈️</span><span class="text-[10px] font-bold">Telegram</span></button>
+            <button onclick="doShare('copy')" class="flex flex-col items-center gap-1.5 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition"><span class="text-2xl">🔗</span><span class="text-[10px] font-bold">Kopyala</span></button>
         </div>
-        <div id="favoriler-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
-    </main>
-</div>
-
-<!-- ==================== QR SİSTEMİ ==================== -->
-<div id="view-qr" class="view">
-    <main class="max-w-5xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-8">📱 QR Kod Sistemi</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm space-y-6 h-fit">
-                <div><label class="font-bold text-sm text-gray-500 block mb-2">🎨 QR Rengi</label><input type="color" id="qr-renk" value="#4f46e5" oninput="qrGuncelle()" class="w-full h-12 rounded-xl cursor-pointer border dark:border-gray-600 p-1 bg-transparent"></div>
-                <div class="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-4 rounded-xl"><label class="font-bold text-sm text-gray-500">🛍️ ShopNex Logo</label><input type="checkbox" id="qr-logo" onchange="qrGuncelle()" class="w-6 h-6 accent-nex-600"></div>
-                <div><label class="font-bold text-sm text-gray-500 block mb-2">🖼️ Çerçeve</label><select id="qr-cerceve" onchange="qrGuncelle()" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2"><option value="cerceve-yok">Çerçevesiz</option><option value="cerceve-ince">Siyah İnce</option><option value="cerceve-kalin">Nex Kalın</option></select></div>
-                <button onclick="musteriSayfasiAc()" class="w-full bg-green-500 text-white py-3 rounded-full font-bold hover:bg-green-600 transition">📱 Müşteri Görünümünü Test Et</button>
-            </div>
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm text-center">
-                <h3 class="font-bold text-gray-400 mb-4 uppercase text-xs tracking-widest">Canlı Önizleme</h3>
-                <div id="qr-kutu" class="relative inline-block p-4 bg-white cerceve-yok shadow-inner rounded-xl mb-6">
-                    <img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://shopnex.io/s/demo&color=4f46e5" class="w-64 h-64 mx-auto">
-                    <div id="qr-logo-el" class="hidden absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-full shadow-lg"><div class="w-8 h-8 bg-gradient-to-br from-nex-500 to-purple-600 rounded-lg flex items-center justify-center"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div></div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="window.open(qrUrl('png'))" class="bg-gray-800 text-white py-3 rounded-full font-semibold hover:bg-black text-sm">⬇️ PNG</button>
-                    <button onclick="window.open(qrUrl('svg'))" class="bg-gray-800 text-white py-3 rounded-full font-semibold hover:bg-black text-sm">⬇️ SVG</button>
-                    <button onclick="window.print()" class="bg-red-500 text-white py-3 rounded-full font-semibold hover:bg-red-600 text-sm">📄 PDF</button>
-                    <button onclick="toast('📲 QR Linki kopyalandı!')" class="bg-green-500 text-white py-3 rounded-full font-bold hover:bg-green-600 text-sm">📲 Paylaş</button>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
-
-<!-- ==================== İSTATİSTİKLER ==================== -->
-<div id="view-istatistik" class="view">
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">📈 İstatistikler</h2>
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm text-center"><p class="text-3xl font-extrabold text-nex-600" id="ist-okutma">0</p><p class="text-xs text-gray-500 font-bold mt-1">QR Okutan</p></div>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm text-center"><p class="text-3xl font-extrabold text-blue-500" id="ist-gunluk">0</p><p class="text-xs text-gray-500 font-bold mt-1">Günlük</p></div>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm text-center"><p class="text-3xl font-extrabold text-purple-500">1.240</p><p class="text-xs text-gray-500 font-bold mt-1">Haftalık</p></div>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm text-center"><p class="text-3xl font-extrabold text-pink-500">5.830</p><p class="text-xs text-gray-500 font-bold mt-1">Aylık</p></div>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm"><h3 class="font-bold text-gray-500 text-sm uppercase mb-4">🏆 En Çok Görüntülenen</h3><div class="flex items-center gap-4"><img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=100" class="w-16 h-16 rounded-2xl object-cover"><div><p class="font-bold text-lg">Filtre Kahve</p><p class="text-sm text-gray-500">1.204 görüntülenme</p></div></div></div>
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-3xl shadow-sm"><h3 class="font-bold text-gray-500 text-sm uppercase mb-4">📱 Cihaz Türü</h3><div class="mb-3"><div class="flex justify-between text-sm font-bold mb-1"><span>Mobil</span><span id="ist-m-y">%</span></div><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3"><div id="ist-m-b" class="bg-green-500 h-3 rounded-full transition-all duration-700" style="width:0%"></div></div></div><div><div class="flex justify-between text-sm font-bold mb-1"><span>Masaüstü</span><span id="ist-d-y">%</span></div><div class="w-full bg-gray-100 dark:bg-gray-700 rounded-full h-3"><div id="ist-d-b" class="bg-blue-500 h-3 rounded-full transition-all duration-700" style="width:0%"></div></div></div></div>
-        </div>
-    </main>
-</div>
-
-<!-- ==================== YÖNETİM ==================== -->
-<div id="view-yonetim" class="view">
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">👥 Kullanıcı & İşletme Yönetimi</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                <div class="flex justify-between items-center mb-4"><h3 class="font-bold text-lg">Kullanıcılar</h3><button onclick="toast('🔔 Bildirim gönderildi!')" class="bg-nex-600 text-white px-4 py-2 rounded-full text-xs font-bold hover:bg-nex-700">🔔 Bildirim</button></div>
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-nex-600 rounded-full flex items-center justify-center text-white font-bold text-sm">AY</div><div><p class="font-bold text-sm">Ahmet Yılmaz</p><p class="text-xs text-gray-500">ahmet@shopnex.io • <span class="text-nex-500 font-bold">Yönetici</span></p></div></div><span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold">Aktif</span></div>
-                    <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl"><div class="flex items-center gap-3"><div class="w-10 h-10 bg-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm">EK</div><div><p class="font-bold text-sm">Elif Kaya</p><p class="text-xs text-gray-500">elif@shopnex.io • <span class="text-orange-500 font-bold">Editör</span></p></div></div><span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold">Aktif</span></div>
-                </div>
-            </div>
-            <div class="space-y-6">
-                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                    <h3 class="font-bold text-lg mb-4">🏢 İşletme Ayarları</h3>
-                    <div class="space-y-3">
-                        <div><label class="text-xs font-bold text-gray-500">İşletme Adı</label><input value="ShopNex Demo Mağaza" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 text-sm outline-nex-500"></div>
-                        <button onclick="toast('✅ Kaydedildi!')" class="w-full bg-nex-600 text-white py-2 rounded-full text-sm font-bold hover:bg-nex-700">Kaydet</button>
-                    </div>
-                </div>
-                <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                    <h3 class="font-bold text-lg mb-4">🛡️ Spam Koruması</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between"><span class="text-sm">Rate Limiting</span><input type="checkbox" checked class="w-5 h-5 accent-nex-600"></div>
-                        <div class="flex items-center justify-between"><span class="text-sm">Bot Algılama</span><input type="checkbox" checked class="w-5 h-5 accent-nex-600"></div>
-                        <div class="flex items-center justify-between"><span class="text-sm">CAPTCHA</span><input type="checkbox" checked class="w-5 h-5 accent-nex-600"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="mt-6 bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-            <h3 class="font-bold text-lg mb-4">🔍 Ürün Denetimi</h3>
-            <div class="space-y-2 text-sm" id="denetim-log">
-                <div class="flex items-center gap-3 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg"><span>⚠️</span><span class="font-medium">Filtre Kahve</span><span class="text-gray-500">fiyat 80→85₺</span><span class="text-xs text-gray-400 ml-auto">2 saat önce</span></div>
-                <div class="flex items-center gap-3 p-2 bg-green-50 dark:bg-green-900/20 rounded-lg"><span>✅</span><span class="font-medium">San Sebastian</span><span class="text-gray-500">yeni ürün</span><span class="text-xs text-gray-400 ml-auto">5 saat önce</span></div>
-            </div>
-        </div>
-    </main>
-</div>
-
-<!-- ==================== GÜVENLİK ==================== -->
-<div id="view-guvenlik" class="view">
-    <main class="max-w-5xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">🔒 Güvenlik Merkezi</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                <h3 class="font-bold text-lg mb-4">🌐 HTTPS / SSL</h3>
-                <div class="flex items-center gap-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-2xl mb-4"><span class="text-4xl">🔒</span><div><p class="font-bold text-green-700 dark:text-green-400">SSL Aktif</p><p class="text-sm text-gray-500">Let's Encrypt • 21 Ekim 2026</p></div></div>
-                <div class="space-y-2">
-                    <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm"><span>HTTPS 301</span><span class="text-green-600 font-bold">✅</span></div>
-                    <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm"><span>HSTS</span><span class="text-green-600 font-bold">✅</span></div>
-                    <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm"><span>TLS 1.3</span><span class="text-green-600 font-bold">✅</span></div>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                <h3 class="font-bold text-lg mb-4">🛡️ CAPTCHA Test</h3>
-                <div class="p-4 bg-nex-50 dark:bg-nex-900/20 rounded-2xl">
-                    <p class="text-sm mb-2">Doğrulama: <b id="guv-captcha"></b></p>
-                    <div class="flex gap-2"><input type="text" id="guv-input" placeholder="Cevap" class="flex-1 border dark:border-gray-600 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm outline-nex-500"><button onclick="captchaTest()" class="bg-nex-600 text-white px-4 py-2 rounded-lg text-sm font-bold">Doğrula</button></div>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
-
-<!-- ==================== SEO ==================== -->
-<div id="view-seo" class="view">
-    <main class="max-w-5xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">🔍 SEO Yönetimi</h2>
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                <h3 class="font-bold text-lg mb-4">📝 Meta Bilgileri</h3>
-                <div class="space-y-4">
-                    <div><label class="text-xs font-bold text-gray-500">SEO Başlığı</label><input value="ShopNex - Akıllı Dijital Mağaza Platformu" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 text-sm outline-nex-500"></div>
-                    <div><label class="text-xs font-bold text-gray-500">Meta Açıklama</label><textarea rows="3" class="w-full border dark:border-gray-600 dark:bg-gray-700 rounded-xl px-3 py-2 mt-1 text-sm outline-nex-500">ShopNex ile işletmenizi dijitalleştirin. QR menü, ürün yönetimi ve istatistikler.</textarea></div>
-                    <button onclick="toast('✅ SEO kaydedildi!')" class="w-full bg-nex-600 text-white py-2 rounded-full text-sm font-bold hover:bg-nex-700">Kaydet</button>
-                </div>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                <h3 class="font-bold text-lg mb-4">🗺️ Sitemap & Robots</h3>
-                <div class="space-y-2">
-                    <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm"><span>sitemap.xml</span><button onclick="sitemapOlustur()" class="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-bold">İndir ⬇️</button></div>
-                    <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm"><span>robots.txt</span><button onclick="toast('User-agent: * | Allow: / | Sitemap: shopnex.io/sitemap.xml')" class="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold">Gör</button></div>
-                    <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm"><span>Schema.org</span><span class="text-green-600 font-bold">✅ Aktif</span></div>
-                    <div class="flex justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-xl text-sm"><span>Open Graph</span><span class="text-green-600 font-bold">✅ Aktif</span></div>
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
-
-<!-- ==================== REKLAM ==================== -->
-<div id="view-reklam" class="view">
-    <main class="max-w-7xl mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-6"><h2 class="text-2xl font-bold">📢 Reklam Yönetimi</h2><button onclick="toast('📢 Yeni reklam formu açıldı!')" class="bg-nex-600 text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-nex-700">+ Yeni Reklam</button></div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm text-center"><p class="text-2xl font-extrabold text-blue-600">12.4K</p><p class="text-xs text-gray-500 font-bold mt-1">Gösterim</p></div>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm text-center"><p class="text-2xl font-extrabold text-green-600">847</p><p class="text-xs text-gray-500 font-bold mt-1">Tıklama</p></div>
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-2xl shadow-sm text-center"><p class="text-2xl font-extrabold text-purple-600">%6.8</p><p class="text-xs text-gray-500 font-bold mt-1">CTR</p></div>
-        </div>
-        <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left"><thead class="bg-gray-50 dark:bg-gray-700 text-gray-500 text-xs uppercase"><tr><th class="px-4 py-3">Reklam</th><th class="px-4 py-3">Konum</th><th class="px-4 py-3">Gösterim</th><th class="px-4 py-3">Tıklama</th><th class="px-4 py-3">Durum</th></tr></thead><tbody class="divide-y dark:divide-gray-700 text-sm">
-            <tr><td class="px-4 py-3 font-bold">🛍️ Yaz Kampanyası</td><td class="px-4 py-3"><span class="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">Banner</span></td><td class="px-4 py-3">5.2K</td><td class="px-4 py-3">412</td><td class="px-4 py-3"><span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold">Aktif</span></td></tr>
-            <tr><td class="px-4 py-3 font-bold">☕ İndirim Popup</td><td class="px-4 py-3"><span class="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded-full">Popup</span></td><td class="px-4 py-3">3.8K</td><td class="px-4 py-3">289</td><td class="px-4 py-3"><span class="bg-green-100 text-green-700 text-xs px-2 py-1 rounded-full font-bold">Aktif</span></td></tr>
-        </tbody></table></div></div>
-    </main>
-</div>
-
-<!-- ==================== YEDEKLEME ==================== -->
-<div id="view-yedek" class="view">
-    <main class="max-w-5xl mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6">💾 Veri Yedekleme</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                <h3 class="font-bold text-lg mb-4">📤 Yedek Al</h3>
-                <button onclick="yedekAl()" class="w-full bg-green-600 text-white py-3 rounded-full font-bold hover:bg-green-700 mb-3">⬇️ Tam Yedek (JSON)</button>
-                <button onclick="csvDisaAktar()" class="w-full bg-blue-600 text-white py-3 rounded-full font-bold hover:bg-blue-700">⬇️ Ürünler (CSV)</button>
-            </div>
-            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-6">
-                <h3 class="font-bold text-lg mb-4">📥 Yedek Yükle</h3>
-                <label class="block w-full bg-orange-500 text-white py-3 rounded-full font-bold hover:bg-orange-600 text-center cursor-pointer mb-3">⬆️ JSON Yükle<input type="file" accept=".json" class="hidden" onchange="yedekYukle(this)"></label>
-                <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-xl text-sm text-yellow-700">⚠️ Mevcut verilerin üzerine yazar!</div>
-            </div>
-        </div>
-    </main>
-</div>
-
-<!-- ==================== MÜŞTERİ SAYFASI ==================== -->
-<div id="view-musteri" class="view bg-gray-50 dark:bg-gray-900 min-h-screen pb-20">
-    <div class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40 p-4 text-center relative">
-        <button onclick="sayfaGoster('view-panel')" class="absolute left-4 top-4 text-xs bg-gray-100 dark:bg-gray-700 px-3 py-1.5 rounded-full font-bold text-gray-500">← Admin</button>
-        <button onclick="temaDegistir()" class="absolute right-4 top-3 text-xl" id="tema-btn-m">🌙</button>
-        <div class="flex items-center justify-center gap-2">
-            <div class="w-7 h-7 bg-gradient-to-br from-nex-500 to-purple-600 rounded-lg flex items-center justify-center"><svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg></div>
-            <h2 class="text-xl font-extrabold text-gray-800 dark:text-white">Shop<span class="text-nex-600">Nex</span> Mağaza</h2>
-        </div>
-        <p class="text-xs text-gray-400 font-bold tracking-widest uppercase mt-1">Powered by ShopNex</p>
-    </div>
-    <div class="max-w-5xl mx-auto px-4 mt-3"><div class="bg-gradient-to-r from-nex-500 to-purple-600 text-white p-3 rounded-2xl text-center text-sm font-bold cursor-pointer hover:opacity-90 transition">🛍️ ShopNex Yaz Kampanyası! Tüm ürünlerde %20 indirim →</div></div>
-    <div class="max-w-5xl mx-auto p-4">
-        <div class="flex flex-col md:flex-row gap-3 mb-6 mt-3">
-            <input type="text" id="m-arama" onkeyup="musteriCiz()" placeholder="🔍 Ürün ara..." class="flex-1 px-5 py-3 rounded-full border dark:border-gray-700 dark:bg-gray-800 outline-nex-500 shadow-sm">
-            <select id="m-kategori" onchange="musteriCiz()" class="px-5 py-3 rounded-full border dark:border-gray-700 dark:bg-gray-800 outline-nex-500 shadow-sm font-medium"></select>
-            <select id="m-siralama" onchange="musteriCiz()" class="px-5 py-3 rounded-full border dark:border-gray-700 dark:bg-gray-800 outline-nex-500 shadow-sm font-medium"><option value="v">Öne Çıkanlar</option><option value="a">Fiyat ↑</option><option value="z">Fiyat ↓</option></select>
-        </div>
-        <div id="m-urunler" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+        <button onclick="closeShareModal()" class="w-full py-3 bg-gray-100 dark:bg-gray-700 rounded-xl text-sm font-bold hover:bg-gray-200 transition">Kapat</button>
     </div>
 </div>
 
-<!-- PAYLAŞIM MODALI -->
-<div id="paylas-modal" class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white dark:bg-gray-800 rounded-3xl w-full max-w-sm p-6 anim text-center">
-        <h3 class="text-lg font-bold mb-2">📤 Ürünü Paylaş</h3>
-        <p id="paylas-urun-ad" class="text-sm text-gray-500 mb-4"></p>
-        <div class="grid grid-cols-4 gap-3 mb-4">
-            <button onclick="paylasYap('whatsapp')" class="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-green-50 dark:hover:bg-green-900/20 transition"><span class="text-2xl">💬</span><span class="text-[10px] font-bold">WhatsApp</span></button>
-            <button onclick="paylasYap('twitter')" class="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"><span class="text-2xl">🐦</span><span class="text-[10px] font-bold">Twitter</span></button>
-            <button onclick="paylasYap('telegram')" class="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-sky-50 dark:hover:bg-sky-900/20 transition"><span class="text-2xl">✈️</span><span class="text-[10px] font-bold">Telegram</span></button>
-            <button onclick="paylasYap('kopyala')" class="flex flex-col items-center gap-1 p-3 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 transition"><span class="text-2xl">🔗</span><span class="text-[10px] font-bold">Kopyala</span></button>
-        </div>
-        <button onclick="document.getElementById('paylas-modal').classList.add('hidden')" class="w-full bg-gray-100 dark:bg-gray-700 py-2 rounded-full text-sm font-bold hover:bg-gray-200 transition">Kapat</button>
-    </div>
-</div>
-
-<!-- ==================== JAVASCRIPT ==================== -->
+<!-- ===== JAVASCRIPT ===== -->
 <script>
-let urunler=[
-    {id:1,ad:"Filtre Kahve",marka:"NexCoffee",kategori:"İçecek",fiyat:"85.00",indirim:"75.00",stok:40,barkod:"8691",sku:"NX-001",birim:"Adet",durum:true,foto:"https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400"},
-    {id:2,ad:"San Sebastian Cheesecake",marka:"NexBakery",kategori:"Tatlı",fiyat:"140.00",indirim:"",stok:12,barkod:"8692",sku:"NX-002",birim:"Porsiyon",durum:true,foto:"https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400"},
-    {id:3,ad:"Ev Yapımı Limonata",marka:"NexFresh",kategori:"Soğuk İçecek",fiyat:"60.00",indirim:"",stok:20,barkod:"8693",sku:"NX-003",birim:"Lt",durum:true,foto:"https://images.unsplash.com/photo-1556881286-fc6915169721?w=400"},
-    {id:4,ad:"Klasik Hamburger",marka:"NexBurger",kategori:"Atıştırmalık",fiyat:"190.00",indirim:"160.00",stok:25,barkod:"8694",sku:"NX-004",birim:"Adet",durum:true,foto:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400"},
-    {id:5,ad:"Caramel Latte",marka:"NexCoffee",kategori:"İçecek",fiyat:"95.00",indirim:"",stok:50,barkod:"8695",sku:"NX-005",birim:"Adet",durum:true,foto:"https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400"},
-    {id:6,ad:"Çikolatalı Brownie",marka:"NexBakery",kategori:"Tatlı",fiyat:"110.00",indirim:"90.00",stok:15,barkod:"8696",sku:"NX-006",birim:"Porsiyon",durum:true,foto:"https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=400"}
-];
-let analitik={okutma:128,gunluk:45,mobil:105,masaustu:23};
-let favoriler=[];
-let paylasilanUrun=null;
+/**
+ * ShopNex - Ürün Kataloğu & QR Kod Yönetim Sistemi
+ * Modüler, temiz ve profesyonel JavaScript
+ */
 
-function toast(msg){const t=document.getElementById('toast');t.innerText=msg;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),3000);}
-function temaDegistir(){document.documentElement.classList.toggle('dark');const i=document.documentElement.classList.contains('dark')?'☀️':'🌙';['tema-btn-p','tema-btn-a','tema-btn-m'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerText=i;});}
-let dil='tr';
-function dilDegistir(){dil=dil==='tr'?'en':'tr';const b=dil==='tr'?'EN':'TR';document.getElementById('dil-btn-p').innerText=b;document.getElementById('dil-btn-a').innerText=b;toast(dil==='en'?'🇬🇧 Language: English':'🇹🇷 Dil: Türkçe');}
-function sayfaGoster(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById(id).classList.add('active');document.getElementById('admin-nav').style.display=(id==='view-musteri')?'none':'block';window.scrollTo(0,0);if(id==='view-panel'||id==='view-urunler')tablolariCiz();if(id==='view-istatistik')istCiz();if(id==='view-guvenlik')captchaUret('guv-captcha');if(id==='view-favoriler')favorilerCiz();}
-function girisYap(e){e.preventDefault();if(!document.getElementById('captcha-check').checked){toast('⚠️ CAPTCHA gerekli!');return;}const cv=document.getElementById('captcha-cevap');if(cv&&cv.value&&parseInt(cv.value)!==captchaCevap){toast('❌ CAPTCHA yanlış!');return;}document.getElementById('nav-public').classList.add('hidden');document.getElementById('nav-app').classList.remove('hidden');document.getElementById('nav-app').classList.add('flex');sayfaGoster('view-panel');toast('✅ Hoş geldiniz, ShopNex!');}
-function cikisYap(){document.getElementById('nav-app').classList.add('hidden');document.getElementById('nav-public').classList.remove('hidden');document.getElementById('nav-public').classList.add('flex');sayfaGoster('view-ana');}
-function sekme(t){const g=document.getElementById('tab-giris'),k=document.getElementById('tab-kayit'),i=document.getElementById('alan-isletme');if(t==='kayit'){g.className="flex-1 py-2 font-semibold text-gray-400";k.className="flex-1 py-2 font-semibold text-nex-600 border-b-2 border-nex-600";i.classList.remove('hidden');}else{k.className="flex-1 py-2 font-semibold text-gray-400";g.className="flex-1 py-2 font-semibold text-nex-600 border-b-2 border-nex-600";i.classList.add('hidden');}}
+// ==================== VERİ KATMANI ====================
+const DB = {
+    products: [
+        { id: 1, name: "Filtre Kahve", brand: "NexCoffee", category: "İçecek", price: "85.00", discount: "75.00", stock: 40, barcode: "8690001", sku: "NX-001", unit: "Adet", active: true, desc: "Premium çekirdeklerden taze demlenmiş filtre kahve.", photo: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400" },
+        { id: 2, name: "San Sebastian Cheesecake", brand: "NexBakery", category: "Tatlı", price: "140.00", discount: "", stock: 12, barcode: "8690002", sku: "NX-002", unit: "Porsiyon", active: true, desc: "İspanyol usulü yanık cheesecake.", photo: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400" },
+        { id: 3, name: "Ev Yapımı Limonata", brand: "NexFresh", category: "Soğuk İçecek", price: "60.00", discount: "", stock: 20, barcode: "8690003", sku: "NX-003", unit: "Lt", active: true, desc: "Taze sıkılmış limonlardan doğal limonata.", photo: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=400" },
+        { id: 4, name: "Klasik Hamburger", brand: "NexBurger", category: "Atıştırmalık", price: "190.00", discount: "160.00", stock: 25, barcode: "8690004", sku: "NX-004", unit: "Adet", active: true, desc: "180gr dana köfte, cheddar, özel sos.", photo: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
+        { id: 5, name: "Caramel Latte", brand: "NexCoffee", category: "İçecek", price: "95.00", discount: "", stock: 50, barcode: "8690005", sku: "NX-005", unit: "Adet", active: true, desc: "Karamel şuruplu kremalı latte.", photo: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400" },
+        { id: 6, name: "Çikolatalı Brownie", brand: "NexBakery", category: "Tatlı", price: "110.00", discount: "90.00", stock: 15, barcode: "8690006", sku: "NX-006", unit: "Porsiyon", active: true, desc: "Bol çikolatalı, cevizli brownie.", photo: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=400" }
+    ],
+    analytics: { total: 128, daily: 45, mobile: 105, desktop: 23 },
+    favorites: [],
+    actions: [
+        { icon: "✅", text: "Filtre Kahve eklendi", time: "2 saat önce" },
+        { icon: "✏️", text: "Hamburger fiyatı güncellendi", time: "5 saat önce" },
+        { icon: "🗑️", text: "Eski ürün silindi", time: "1 gün önce" },
+        { icon: "📱", text: "QR kod 12 kez okutuldu", time: "Bugün" }
+    ]
+};
 
-let captchaCevap=0;
-function captchaUret(id){const a=Math.floor(Math.random()*10)+1,b=Math.floor(Math.random()*10)+1;captchaCevap=a+b;const el=document.getElementById(id);if(el)el.innerText=`${a} + ${b} = ?`;}
-document.getElementById('captcha-check').addEventListener('change',function(){document.getElementById('captcha-math').classList.toggle('hidden',!this.checked);if(this.checked)captchaUret('captcha-soru');});
-function captchaTest(){if(parseInt(document.getElementById('guv-input').value)===captchaCevap){toast('✅ CAPTCHA doğru!');captchaUret('guv-captcha');document.getElementById('guv-input').value='';}else toast('❌ Yanlış!');}
+// ==================== YARDIMCI FONKSİYONLAR ====================
 
-// FAVORİLER
-function favEkle(id,ev){if(ev)ev.stopPropagation();const idx=favoriler.indexOf(id);if(idx>-1){favoriler.splice(idx,1);toast('💔 Favorilerden çıkarıldı');}else{favoriler.push(id);toast('❤️ Favorilere eklendi!');}favSayacGuncelle();if(document.getElementById('view-musteri').classList.contains('active'))musteriCiz();if(document.getElementById('view-favoriler').classList.contains('active'))favorilerCiz();}
-function favSayacGuncelle(){document.getElementById('fav-sayac-nav').innerText=favoriler.length;const pf=document.getElementById('panel-fav');if(pf)pf.innerText=favoriler.length;}
-function favorilerCiz(){const g=document.getElementById('favoriler-grid'),b=document.getElementById('favoriler-bos');if(!favoriler.length){g.innerHTML='';b.classList.remove('hidden');return;}b.classList.add('hidden');g.innerHTML='';favoriler.forEach((fid,i)=>{const u=urunler.find(x=>x.id===fid);if(!u)return;g.innerHTML+=`<div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm overflow-hidden anim" style="animation-delay:${i*.05}s"><div class="relative h-36"><img src="${u.foto}" class="w-full h-full object-cover"><button onclick="favEkle(${u.id})" class="absolute top-2 right-2 w-9 h-9 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center shadow-lg text-lg heart-anim">❤️</button></div><div class="p-4"><h4 class="font-bold text-sm truncate">${u.ad}</h4><p class="text-nex-600 font-extrabold mt-1">${u.indirim||u.fiyat} ₺</p><button onclick="paylasAc(${u.id})" class="w-full mt-3 bg-nex-50 dark:bg-nex-900/30 text-nex-600 py-2 rounded-full text-xs font-bold hover:bg-nex-600 hover:text-white transition">📤 Paylaş</button></div></div>`;});}
+/** Toast bildirimi göster */
+function showToast(type, message) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+    toast.innerHTML = `<span>${icons[type] || ''}</span><span>${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)'; toast.style.transition = 'all 0.3s'; setTimeout(() => toast.remove(), 300); }, 3500);
+}
 
-// PAYLAŞMA
-function paylasAc(id){paylasilanUrun=urunler.find(x=>x.id===id);document.getElementById('paylas-urun-ad').innerText=paylasilanUrun.ad+' • '+paylasilanUrun.fiyat+'₺';document.getElementById('paylas-modal').classList.remove('hidden');}
-function paylasYap(tip){const url='https://shopnex.io/p/'+paylasilanUrun.sku;const text=paylasilanUrun.ad+' - '+paylasilanUrun.fiyat+'₺ | ShopNex\'te keşfet!';
-if(tip==='whatsapp')window.open('https://wa.me/?text='+encodeURIComponent(text+' '+url));
-else if(tip==='twitter')window.open('https://twitter.com/intent/tweet?text='+encodeURIComponent(text)+'&url='+encodeURIComponent(url));
-else if(tip==='telegram')window.open('https://t.me/share/url?url='+encodeURIComponent(url)+'&text='+encodeURIComponent(text));
-else{navigator.clipboard?.writeText(url);toast('🔗 Link kopyalandı!');}
-document.getElementById('paylas-modal').classList.add('hidden');}
+/** XSS koruması - HTML escape */
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
 
-// MÜŞTERİ
-function musteriSayfasiAc(){analitik.okutma++;analitik.gunluk++;const m=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||window.innerWidth<768;if(m)analitik.mobil++;else analitik.masaustu++;katDoldur();musteriCiz();sayfaGoster('view-musteri');}
-function katDoldur(){const s=document.getElementById('m-kategori');const k=[...new Set(urunler.map(u=>u.kategori))];s.innerHTML='<option value="hepsi">📂 Tümü</option>';k.forEach(x=>s.innerHTML+=`<option value="${x}">${x}</option>`);}
-function musteriCiz(){const a=document.getElementById('m-arama').value.toLowerCase(),k=document.getElementById('m-kategori').value,s=document.getElementById('m-siralama').value;let l=urunler.filter(u=>u.durum);if(a)l=l.filter(u=>u.ad.toLowerCase().includes(a)||u.kategori.toLowerCase().includes(a)||u.marka.toLowerCase().includes(a));if(k!=='hepsi')l=l.filter(u=>u.kategori===k);const f=u=>parseFloat(u.indirim||u.fiyat);if(s==='a')l.sort((x,y)=>f(x)-f(y));if(s==='z')l.sort((x,y)=>f(y)-f(x));const kutu=document.getElementById('m-urunler');kutu.innerHTML='';if(!l.length){kutu.innerHTML='<p class="col-span-full text-center text-gray-400 py-10 font-bold">Ürün bulunamadı 😕</p>';return;}
-l.forEach((u,i)=>{const isFav=favoriler.includes(u.id);const fh=u.indirim?`<span class="text-gray-400 line-through text-xs mr-1">${u.fiyat}₺</span><span class="text-red-500 font-extrabold">${u.indirim}₺</span>`:`<span class="font-extrabold text-nex-600">${u.fiyat}₺</span>`;
-kutu.innerHTML+=`<div class="bg-white dark:bg-gray-800 rounded-3xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden group anim" style="animation-delay:${i*.04}s">
-<div class="relative h-32 sm:h-40 overflow-hidden"><img src="${u.foto}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition duration-500"><span class="absolute top-2 left-2 bg-black/60 text-white text-[10px] px-2 py-1 rounded-full font-bold">${u.kategori}</span><button onclick="favEkle(${u.id},event)" class="absolute top-2 right-2 w-8 h-8 bg-white/90 dark:bg-gray-800/90 rounded-full flex items-center justify-center shadow-lg text-sm hover:scale-110 transition ${isFav?'heart-anim':''}">${isFav?'❤️':'🤍'}</button></div>
-<div class="p-3 sm:p-4"><h4 class="font-bold text-sm truncate">${u.ad}</h4><p class="text-[10px] text-gray-400 font-medium">${u.marka}</p><div class="mt-1.5">${fh}</div>
-<div class="flex gap-2 mt-3"><button class="flex-1 bg-nex-600 text-white py-2 rounded-full text-xs font-bold hover:bg-nex-700 transition">🛒 Sepete</button><button onclick="paylasAc(${u.id})" class="w-9 h-9 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center text-sm hover:bg-nex-100 dark:hover:bg-nex-900/30 transition">📤</button></div></div></div>`;});}
+// ==================== NAVİGASYON ====================
+let currentPage = 'home';
+let isLoggedIn = false;
 
-// İSTATİSTİK
-function istCiz(){document.getElementById('ist-okutma').innerText=analitik.okutma;document.getElementById('ist-gunluk').innerText=analitik.gunluk;const t=analitik.mobil+analitik.masaustu,m=Math.round(analitik.mobil/t*100);document.getElementById('ist-m-y').innerText="%"+m;document.getElementById('ist-d-y').innerText="%"+(100-m);document.getElementById('ist-m-b').style.width=m+"%";document.getElementById('ist-d-b').style.width=(100-m)+"%";}
+function navigate(page) {
+    // Auth kontrolü
+    const protectedPages = ['dashboard', 'products', 'favorites', 'qr', 'stats', 'admin', 'profile'];
+    if (protectedPages.includes(page) && !isLoggedIn) {
+        showToast('warning', '⚠️ Bu sayfaya erişmek için giriş yapmalısınız.');
+        page = 'login';
+    }
+    
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById(`page-${page}`);
+    if (target) {
+        target.classList.add('active');
+        currentPage = page;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Sayfa özel render
+        if (page === 'dashboard') renderDashboard();
+        if (page === 'products') renderProducts();
+        if (page === 'favorites') renderFavorites();
+        if (page === 'stats') renderStats();
+        if (page === 'customer') renderCustomerProducts();
+    }
+    
+    // Navbar durumu
+    updateNavVisibility();
+}
 
-// ÜRÜN
-function tablolariCiz(){document.getElementById('istatistik-urun').innerText=urunler.length;const at=document.getElementById('urun-tablosu'),pt=document.getElementById('panel-urun-tablosu');at.innerHTML='';pt.innerHTML='';urunler.forEach(u=>{const d=`<button onclick="durumDegistir(${u.id})" class="px-3 py-1 rounded-full text-xs font-bold ${u.durum?'bg-green-100 text-green-700':'bg-red-100 text-red-700'}">${u.durum?'Aktif':'Pasif'}</button>`;
-at.innerHTML+=`<tr class="hover:bg-gray-50 dark:hover:bg-gray-700"><td class="px-4 py-3"><img src="${u.foto}" class="w-10 h-10 rounded-xl object-cover"></td><td class="px-4 py-3 font-bold">${u.ad}</td><td class="px-4 py-3 text-gray-500 text-xs">${u.marka}</td><td class="px-4 py-3">${u.fiyat}₺</td><td class="px-4 py-3 text-red-500">${u.indirim?u.indirim+'₺':'-'}</td><td class="px-4 py-3">${u.stok}</td><td class="px-4 py-3 text-xs">${u.sku}</td><td class="px-4 py-3">${u.birim}</td><td class="px-4 py-3">${d}</td><td class="px-4 py-3"><button onclick="paylasAc(${u.id})" class="text-xs bg-nex-50 dark:bg-nex-900/30 text-nex-600 px-2 py-1 rounded-full font-bold hover:bg-nex-600 hover:text-white">📤</button></td></tr>`;
-pt.innerHTML+=`<tr class="hover:bg-gray-50 dark:hover:bg-gray-700"><td class="px-6 py-4 font-medium">${u.ad}</td><td class="px-6 py-4">${u.fiyat}₺</td><td class="px-6 py-4">${u.stok}</td><td class="px-6 py-4">${d}</td></tr>`;});}
-function durumDegistir(id){const u=urunler.find(x=>x.id===id);u.durum=!u.durum;denetimLog(u.ad+' → '+(u.durum?'Aktif':'Pasif'));tablolariCiz();toast(u.durum?'✅ Aktif':'⏸️ Pasif');}
-function denetimLog(msg){const l=document.getElementById('denetim-log');if(l)l.innerHTML=`<div class="flex items-center gap-3 p-2 bg-nex-50 dark:bg-nex-900/20 rounded-lg anim"><span>📋</span><span class="text-gray-600 dark:text-gray-300">${msg}</span><span class="text-xs text-gray-400 ml-auto">Şimdi</span></div>`+l.innerHTML;}
-function modalAc(){document.getElementById('urun-modal').classList.remove('hidden');}
-function modalKapat(){document.getElementById('urun-modal').classList.add('hidden');}
-function urunKaydet(e){e.preventDefault();const y={id:Date.now(),ad:document.getElementById('f-ad').value,fiyat:document.getElementById('f-fiyat').value,indirim:document.getElementById('f-indirim').value,stok:document.getElementById('f-stok').value,birim:document.getElementById('f-birim').value,barkod:document.getElementById('f-barkod').value||'-',sku:'NX-'+String(urunler.length+1).padStart(3,'0'),marka:document.getElementById('f-marka').value||'ShopNex',kategori:document.getElementById('f-kategori').value||'Genel',durum:document.getElementById('f-durum').checked,foto:"https://ui-avatars.com/api/?name="+encodeURIComponent(document.getElementById('f-ad').value)+"&background=4f46e5&color=fff&size=400"};
-const fi=document.getElementById('f-foto');const bit=()=>{tablolariCiz();katDoldur();modalKapat();e.target.reset();denetimLog(y.ad+' eklendi');toast('✅ Ürün eklendi!');};
-if(fi.files&&fi.files[0]){const r=new FileReader();r.onload=ev=>{y.foto=ev.target.result;urunler.unshift(y);bit();};r.readAsDataURL(fi.files[0]);}else{urunler.unshift(y);bit();}}
-function csvDisaAktar(){let c="Ürün,Marka,Kategori,Fiyat,İndirim,Stok,SKU,Birim,Durum\n";urunler.forEach(u=>c+=`"${u.ad}","${u.marka}","${u.kategori}","${u.fiyat}","${u.indirim}","${u.stok}","${u.sku}","${u.birim}","${u.durum?'Aktif':'Pasif'}"\n`);const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["\uFEFF"+c],{type:'text/csv;charset=utf-8;'}));a.download="shopnex_urunler.csv";a.click();toast('📤 CSV indirildi!');}
-function csvIceAktar(i){if(i.files[0]){toast('✅ Toplu aktarım tamamlandı!');i.value='';}}
+function updateNavVisibility() {
+    const publicNav = document.getElementById('navPublic');
+    const appNav = document.getElementById('navApp');
+    const authBtns = document.getElementById('authBtns');
+    const userBtns = document.getElementById('userBtns');
+    
+    if (isLoggedIn) {
+        publicNav.classList.add('hidden');
+        appNav.classList.remove('hidden');
+        appNav.classList.add('flex');
+        authBtns.classList.add('hidden');
+        userBtns.classList.remove('hidden');
+        userBtns.classList.add('flex');
+    } else {
+        publicNav.classList.remove('hidden');
+        appNav.classList.add('hidden');
+        authBtns.classList.remove('hidden');
+        userBtns.classList.add('hidden');
+    }
+}
 
-// QR
-function qrUrl(f=''){return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://shopnex.io/s/demo&color=${document.getElementById('qr-renk').value.replace('#','')}${f?'&format='+f:''}`;}
-function qrGuncelle(){document.getElementById('qr-img').src=qrUrl();document.getElementById('qr-logo-el').classList.toggle('hidden',!document.getElementById('qr-logo').checked);document.getElementById('qr-kutu').className=`relative inline-block p-4 bg-white shadow-inner rounded-xl mb-6 ${document.getElementById('qr-cerceve').value}`;}
+function scrollToSection(id) {
+    if (currentPage !== 'home') navigate('home');
+    setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' }), 100);
+}
 
-// SEO
-function sitemapOlustur(){const x=`<?xml version="1.0"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n<url><loc>https://shopnex.io/</loc></url>\n<url><loc>https://shopnex.io/s/demo</loc></url>\n</urlset>`;const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([x],{type:'application/xml'}));a.download="sitemap.xml";a.click();toast('🗺️ sitemap.xml indirildi!');}
+function toggleMobileMenu() {
+    document.getElementById('mobileMenu').classList.toggle('hidden');
+}
 
-// YEDEK
-function yedekAl(){const v={urunler,favoriler,analitik,tarih:new Date().toISOString(),platform:"ShopNex"};const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(v,null,2)],{type:'application/json'}));a.download=`shopnex_yedek_${new Date().toISOString().slice(0,10)}.json`;a.click();toast('💾 Yedek indirildi!');}
-function yedekYukle(i){if(i.files&&i.files[0]){const r=new FileReader();r.onload=e=>{try{const d=JSON.parse(e.target.result);if(d.urunler){urunler=d.urunler;if(d.favoriler)favoriler=d.favoriler;if(d.analitik)analitik=d.analitik;tablolariCiz();favSayacGuncelle();toast('✅ Yedek yüklendi!');}else toast('❌ Geçersiz!');}catch(err){toast('❌ Hata!');}};r.readAsText(i.files[0]);i.value='';}}
+// ==================== TEMA ====================
+function toggleTheme() {
+    document.documentElement.classList.toggle('dark');
+    const isDark = document.documentElement.classList.contains('dark');
+    document.getElementById('themeBtn').textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
 
-function anaArama(){if(!document.getElementById('aramaKutusu').value.trim())return;girisYap(new Event('submit'));}
+// Tema yükleme
+if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+    document.getElementById('themeBtn').textContent = '☀️';
+}
 
-// BAŞLANGIÇ
-tablolariCiz();istCiz();favSayacGuncelle();captchaUret('captcha-soru');captchaUret('guv-captcha');
+// ==================== AUTH ====================
+let captchaAnswer = 0;
+
+function showCaptchaMath() {
+    const checked = document.getElementById('loginCaptcha').checked;
+    document.getElementById('captchaMath').classList.toggle('hidden', !checked);
+    if (checked) {
+        const a = Math.floor(Math.random() * 10) + 1;
+        const b = Math.floor(Math.random() * 10) + 1;
+        captchaAnswer = a + b;
+        document.getElementById('captchaQuestion').textContent = `${a} + ${b} = ?`;
+    }
+}
+
+function handleLogin(e) {
+    e.preventDefault();
+    if (!document.getElementById('loginCaptcha').checked) {
+        showToast('error', '❌ Lütfen CAPTCHA doğrulamasını tamamlayın.');
+        return;
+    }
+    const answer = document.getElementById('captchaAnswer').value;
+    if (answer && parseInt(answer) !== captchaAnswer) {
+        showToast('error', '❌ CAPTCHA cevabı yanlış!');
+        return;
+    }
+    isLoggedIn = true;
+    updateNavVisibility();
+    navigate('dashboard');
+    showToast('success', '🎉 Hoş geldiniz! Giriş başarılı.');
+}
+
+function handleRegister(e) {
+    e.preventDefault();
+    isLoggedIn = true;
+    updateNavVisibility();
+    navigate('dashboard');
+    showToast('success', '🎉 Hesabınız oluşturuldu! Hoş geldiniz.');
+}
+
+function handleForgot(e) {
+    e.preventDefault();
+    showToast('success', '📧 Şifre sıfırlama bağlantısı e-postanıza gönderildi!');
+}
+
+function logout() {
+    isLoggedIn = false;
+    updateNavVisibility();
+    navigate('home');
+    showToast('info', '👋 Çıkış yapıldı. Görüşmek üzere!');
+}
+
+function saveProfile(e) {
+    e.preventDefault();
+    showToast('success', '✅ Profil bilgileriniz kaydedildi!');
+}
+
+// ==================== DASHBOARD ====================
+function renderDashboard() {
+    document.getElementById('statProducts').textContent = DB.products.length;
+    document.getElementById('statCategories').textContent = [...new Set(DB.products.map(p => p.category))].length;
+    document.getElementById('statScans').textContent = DB.analytics.total;
+    document.getElementById('statFavs').textContent = DB.favorites.length;
+    
+    // Son ürünler
+    const recent = document.getElementById('recentProducts');
+    recent.innerHTML = DB.products.slice(0, 4).map(p => `
+        <div class="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 dark:hover:bg-dark-900 transition">
+            <img src="${p.photo}" class="w-12 h-12 rounded-xl object-cover" loading="lazy" alt="${escapeHtml(p.name)}">
+            <div class="flex-1 min-w-0"><p class="font-bold text-sm truncate">${escapeHtml(p.name)}</p><p class="text-xs text-gray-500">${escapeHtml(p.category)} • ${p.price}₺</p></div>
+            <span class="text-xs font-bold px-2.5 py-1 rounded-full ${p.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">${p.active ? 'Aktif' : 'Pasif'}</span>
+        </div>
+    `).join('');
+    
+    // Son işlemler
+    document.getElementById('recentActions').innerHTML = DB.actions.map(a => `
+        <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-dark-900 rounded-xl">
+            <span class="text-lg">${a.icon}</span>
+            <span class="text-sm flex-1">${a.text}</span>
+            <span class="text-xs text-gray-400">${a.time}</span>
+        </div>
+    `).join('');
+}
+
+// ==================== ÜRÜN YÖNETİMİ ====================
+let editingProductId = null;
+
+function renderProducts() {
+    const table = document.getElementById('productTable');
+    table.innerHTML = DB.products.map(p => `
+        <tr class="hover:bg-gray-50 dark:hover:bg-dark-900 transition">
+            <td class="px-5 py-4"><div class="flex items-center gap-3"><img src="${p.photo}" class="w-10 h-10 rounded-xl object-cover" loading="lazy"><span class="font-bold text-sm">${escapeHtml(p.name)}</span></div></td>
+            <td class="px-5 py-4 text-gray-500">${escapeHtml(p.category)}</td>
+            <td class="px-5 py-4 font-bold">${p.discount ? `<span class="text-red-500">${p.discount}₺</span> <span class="text-gray-400 line-through text-xs">${p.price}₺</span>` : p.price + '₺'}</td>
+            <td class="px-5 py-4">${p.stock}</td>
+            <td class="px-5 py-4 text-xs text-gray-500 font-mono">${p.sku}</td>
+            <td class="px-5 py-4"><button onclick="toggleProductStatus(${p.id})" class="text-xs font-bold px-3 py-1.5 rounded-full transition ${p.active ? 'bg-green-100 text-green-700 hover:bg-green-200' : 'bg-red-100 text-red-700 hover:bg-red-200'}">${p.active ? 'Aktif' : 'Pasif'}</button></td>
+            <td class="px-5 py-4"><div class="flex gap-1"><button onclick="editProduct(${p.id})" class="w-8 h-8 rounded-lg bg-nex-50 dark:bg-nex-900/20 text-nex-600 flex items-center justify-center hover:bg-nex-100 transition text-sm">✏️</button><button onclick="deleteProduct(${p.id})" class="w-8 h-8 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-500 flex items-center justify-center hover:bg-red-100 transition text-sm">🗑️</button><button onclick="openShareModal(${p.id})" class="w-8 h-8 rounded-lg bg-gray-50 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-100 transition text-sm">📤</button></div></td>
+        </tr>
+    `).join('');
+}
+
+function openProductModal(id = null) {
+    editingProductId = id;
+    const modal = document.getElementById('productModal');
+    document.getElementById('modalTitle').textContent = id ? 'Ürün Düzenle' : 'Yeni Ürün Ekle';
+    if (id) {
+        const p = DB.products.find(x => x.id === id);
+        document.getElementById('pName').value = p.name;
+        document.getElementById('pPrice').value = p.price;
+        document.getElementById('pDiscount').value = p.discount;
+        document.getElementById('pStock').value = p.stock;
+        document.getElementById('pBarcode').value = p.barcode;
+        document.getElementById('pSku').value = p.sku;
+        document.getElementById('pBrand').value = p.brand;
+        document.getElementById('pCategory').value = p.category;
+        document.getElementById('pDesc').value = p.desc;
+        document.getElementById('pActive').checked = p.active;
+    } else {
+        document.querySelector('#productModal form').reset();
+        document.getElementById('pActive').checked = true;
+    }
+    modal.classList.add('active');
+}
+
+function closeProductModal() { document.getElementById('productModal').classList.remove('active'); }
+
+function saveProduct(e) {
+    e.preventDefault();
+    const data = {
+        name: escapeHtml(document.getElementById('pName').value),
+        price: document.getElementById('pPrice').value,
+        discount: document.getElementById('pDiscount').value,
+        stock: parseInt(document.getElementById('pStock').value) || 0,
+        barcode: document.getElementById('pBarcode').value || '-',
+        sku: document.getElementById('pSku').value || 'NX-' + String(DB.products.length + 1).padStart(3, '0'),
+        brand: escapeHtml(document.getElementById('pBrand').value) || 'ShopNex',
+        category: escapeHtml(document.getElementById('pCategory').value) || 'Genel',
+        desc: escapeHtml(document.getElementById('pDesc').value),
+        unit: document.getElementById('pUnit').value,
+        active: document.getElementById('pActive').checked,
+        photo: "https://ui-avatars.com/api/?name=" + encodeURIComponent(document.getElementById('pName').value) + "&background=4f46e5&color=fff&size=400"
+    };
+    
+    // Fotoğraf yükleme
+    const photoInput = document.getElementById('pPhoto');
+    const finalize = () => {
+        if (editingProductId) {
+            const idx = DB.products.findIndex(x => x.id === editingProductId);
+            DB.products[idx] = { ...DB.products[idx], ...data };
+            addAction('✏️', `${data.name} düzenlendi`);
+            showToast('success', '✅ Ürün güncellendi!');
+        } else {
+            data.id = Date.now();
+            DB.products.unshift(data);
+            addAction('✅', `${data.name} eklendi`);
+            showToast('success', '✅ Ürün eklendi!');
+        }
+        closeProductModal();
+        renderProducts();
+    };
+    
+    if (photoInput.files && photoInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = ev => { data.photo = ev.target.result; finalize(); };
+        reader.readAsDataURL(photoInput.files[0]);
+    } else { finalize(); }
+}
+
+function editProduct(id) { openProductModal(id); }
+
+function deleteProduct(id) {
+    if (confirm('Bu ürünü silmek istediğinize emin misiniz?')) {
+        const p = DB.products.find(x => x.id === id);
+        DB.products = DB.products.filter(x => x.id !== id);
+        DB.favorites = DB.favorites.filter(f => f !== id);
+        addAction('🗑️', `${p.name} silindi`);
+        renderProducts();
+        updateFavCount();
+        showToast('info', '🗑️ Ürün silindi.');
+    }
+}
+
+function toggleProductStatus(id) {
+    const p = DB.products.find(x => x.id === id);
+    p.active = !p.active;
+    renderProducts();
+    showToast('info', p.active ? '✅ Ürün aktifleştirildi' : '⏸️ Ürün pasifleştirildi');
+}
+
+function addAction(icon, text) {
+    DB.actions.unshift({ icon, text, time: 'Şimdi' });
+    if (DB.actions.length > 10) DB.actions.pop();
+}
+
+// CSV İşlemleri
+function exportCSV() {
+    let csv = "Ürün Adı,Marka,Kategori,Fiyat,İndirim,Stok,Barkod,SKU,Birim,Durum\n";
+    DB.products.forEach(p => { csv += `"${p.name}","${p.brand}","${p.category}","${p.price}","${p.discount}","${p.stock}","${p.barcode}","${p.sku}","${p.unit}","${p.active ? 'Aktif' : 'Pasif'}"\n`; });
+    const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'shopnex_urunler.csv';
+    a.click();
+    showToast('success', '📤 CSV dosyası indirildi!');
+}
+
+function importCSV(input) {
+    if (input.files && input.files[0]) {
+        showToast('success', `📥 "${input.files[0].name}" başarıyla içe aktarıldı!`);
+        input.value = '';
+    }
+}
+
+// ==================== FAVORİLER ====================
+function toggleFavorite(id, event) {
+    if (event) event.stopPropagation();
+    const idx = DB.favorites.indexOf(id);
+    if (idx > -1) { DB.favorites.splice(idx, 1); showToast('info', '💔 Favorilerden çıkarıldı'); }
+    else { DB.favorites.push(id); showToast('success', '❤️ Favorilere eklendi!'); }
+    updateFavCount();
+    if (currentPage === 'customer') renderCustomerProducts();
+    if (currentPage === 'favorites') renderFavorites();
+}
+
+function updateFavCount() {
+    document.getElementById('favCount').textContent = DB.favorites.length;
+}
+
+function renderFavorites() {
+    const grid = document.getElementById('favGrid');
+    const empty = document.getElementById('favEmpty');
+    if (!DB.favorites.length) { grid.innerHTML = ''; empty.classList.remove('hidden'); return; }
+    empty.classList.add('hidden');
+    grid.innerHTML = DB.favorites.map((fid, i) => {
+        const p = DB.products.find(x => x.id === fid);
+        if (!p) return '';
+        return `<div class="bg-white dark:bg-dark-800 rounded-3xl border border-gray-100 dark:border-gray-700 overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-slide-up" style="animation-delay:${i * 0.05}s">
+            <div class="relative h-40"><img src="${p.photo}" class="w-full h-full object-cover" loading="lazy"><button onclick="toggleFavorite(${p.id})" class="absolute top-3 right-3 w-9 h-9 bg-white/90 dark:bg-dark-800/90 rounded-full flex items-center justify-center shadow-lg text-lg heart-anim">❤️</button></div>
+            <div class="p-4"><h4 class="font-bold text-sm truncate">${escapeHtml(p.name)}</h4><p class="text-xs text-gray-400 mt-0.5">${escapeHtml(p.brand)}</p><p class="text-nex-600 font-extrabold mt-2">${p.discount || p.price} ₺</p>
+            <button onclick="openShareModal(${p.id})" class="w-full mt-3 py-2.5 bg-nex-50 dark:bg-nex-900/20 text-nex-600 rounded-xl text-xs font-bold hover:bg-nex-600 hover:text-white transition">📤 Paylaş</button></div>
+        </div>`;
+    }).join('');
+}
+
+// ==================== PAYLAŞMA ====================
+let shareProduct = null;
+
+function openShareModal(id) {
+    shareProduct = DB.products.find(x => x.id === id);
+    document.getElementById('shareProductName').textContent = `${shareProduct.name} • ${shareProduct.price}₺`;
+    document.getElementById('shareModal').classList.add('active');
+}
+
+function closeShareModal() { document.getElementById('shareModal').classList.remove('active'); }
+
+function doShare(platform) {
+    const url = `https://shopnex.io/p/${shareProduct.sku}`;
+    const text = `${shareProduct.name} - ${shareProduct.price}₺ | ShopNex'te keşfet!`;
+    if (platform === 'whatsapp') window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`);
+    else if (platform === 'twitter') window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`);
+    else if (platform === 'telegram') window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`);
+    else { navigator.clipboard?.writeText(url); showToast('success', '🔗 Link kopyalandı!'); }
+    closeShareModal();
+}
+
+// ==================== QR KOD ====================
+function getQRUrl(format = '') {
+    const color = document.getElementById('qrColor').value.replace('#', '');
+    let url = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://shopnex.io/s/demo&color=${color}`;
+    if (format) url += `&format=${format}`;
+    return url;
+}
+
+function updateQR() {
+    document.getElementById('qrImage').src = getQRUrl();
+    document.getElementById('qrLogoEl').classList.toggle('hidden', !document.getElementById('qrLogo').checked);
+    const frame = document.getElementById('qrFrame').value;
+    document.getElementById('qrBox').className = `relative inline-block p-5 bg-white ${frame} shadow-inner rounded-2xl mb-6`;
+}
+
+function downloadQR(format) {
+    if (format === 'pdf') { showToast('info', '📄 PDF hazırlanıyor... Yazdırma ekranından kaydedebilirsiniz.'); printQR(); }
+    else { window.open(getQRUrl(format), '_blank'); showToast('success', `⬇️ ${format.toUpperCase()} indiriliyor...`); }
+}
+
+function printQR() {
+    document.getElementById('printQr').src = getQRUrl('png');
+    document.getElementById('print-area').classList.remove('hidden');
+    window.print();
+    document.getElementById('print-area').classList.add('hidden');
+}
+
+function shareQR() {
+    const url = getQRUrl('png');
+    if (navigator.share) { navigator.share({ title: 'ShopNex QR Kod', text: 'Mağazamızın QR kodu', url }); }
+    else { navigator.clipboard?.writeText(url); showToast('success', '📲 QR linki kopyalandı!'); }
+}
+
+// ==================== MÜŞTERİ SAYFASI ====================
+function openCustomerPage() {
+    DB.analytics.total++;
+    DB.analytics.daily++;
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.innerWidth < 768;
+    if (isMobile) DB.analytics.mobile++; else DB.analytics.desktop++;
+    
+    // Kategorileri doldur
+    const cats = [...new Set(DB.products.map(p => p.category))];
+    document.getElementById('custCategory').innerHTML = '<option value="all">📂 Tümü</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
+    
+    navigate('customer');
+    renderCustomerProducts();
+}
+
+function renderCustomerProducts() {
+    const search = (document.getElementById('custSearch')?.value || '').toLowerCase();
+    const category = document.getElementById('custCategory')?.value || 'all';
+    const sort = document.getElementById('custSort')?.value || 'default';
+    
+    let list = DB.products.filter(p => p.active);
+    if (search) list = list.filter(p => p.name.toLowerCase().includes(search) || p.category.toLowerCase().includes(search) || p.brand.toLowerCase().includes(search));
+    if (category !== 'all') list = list.filter(p => p.category === category);
+    
+    const getPrice = p => parseFloat(p.discount || p.price);
+    if (sort === 'asc') list.sort((a, b) => getPrice(a) - getPrice(b));
+    if (sort === 'desc') list.sort((a, b) => getPrice(b) - getPrice(a));
+    
+    const grid = document.getElementById('customerGrid');
+    if (!list.length) { grid.innerHTML = '<p class="col-span-full text-center text-gray-400 py-16 font-bold">Ürün bulunamadı 😕</p>'; return; }
+    
+    grid.innerHTML = list.map((p, i) => {
+        const isFav = DB.favorites.includes(p.id);
+        const priceHtml = p.discount ? `<span class="text-gray-400 line-through text-xs mr-1">${p.price}₺</span><span class="text-red-500 font-extrabold">${p.discount}₺</span>` : `<span class="font-extrabold text-nex-600">${p.price}₺</span>`;
+        return `<div class="bg-white dark:bg-dark-800 rounded-3xl border border-gray-100 dark:border-gray-700 overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 animate-slide-up" style="animation-delay:${i * 0.04}s">
+            <div class="relative h-36 sm:h-44 overflow-hidden">
+                <img src="${p.photo}" loading="lazy" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="${escapeHtml(p.name)}">
+                <span class="absolute top-2.5 left-2.5 bg-black/60 text-white text-[10px] px-2.5 py-1 rounded-full font-bold backdrop-blur-sm">${escapeHtml(p.category)}</span>
+                <button onclick="toggleFavorite(${p.id}, event)" class="absolute top-2.5 right-2.5 w-9 h-9 bg-white/90 dark:bg-dark-800/90 rounded-full flex items-center justify-center shadow-lg text-base hover:scale-110 transition ${isFav ? 'heart-anim' : ''}">${isFav ? '❤️' : '🤍'}</button>
+            </div>
+            <div class="p-4">
+                <h4 class="font-bold text-sm truncate">${escapeHtml(p.name)}</h4>
+                <p class="text-[11px] text-gray-400 font-medium mt-0.5">${escapeHtml(p.brand)}</p>
+                <div class="mt-2">${priceHtml}</div>
+                <div class="flex gap-2 mt-3">
+                    <button class="flex-1 py-2.5 bg-nex-600 text-white rounded-xl text-xs font-bold hover:bg-nex-700 transition shadow-sm">🛒 Sepete Ekle</button>
+                    <button onclick="openShareModal(${p.id})" class="w-10 h-10 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center text-sm hover:bg-nex-50 dark:hover:bg-nex-900/20 transition">📤</button>
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+// ==================== İSTATİSTİK ====================
+function renderStats() {
+    document.getElementById('istTotal').textContent = DB.analytics.total;
+    document.getElementById('istDaily').textContent = DB.analytics.daily;
+    const total = DB.analytics.mobile + DB.analytics.desktop;
+    const mPct = Math.round((DB.analytics.mobile / total) * 100);
+    document.getElementById('mobilePercent').textContent = '%' + mPct;
+    document.getElementById('desktopPercent').textContent = '%' + (100 - mPct);
+    document.getElementById('mobileBar').style.width = mPct + '%';
+    document.getElementById('desktopBar').style.width = (100 - mPct) + '%';
+}
+
+// ==================== SSS ====================
+function toggleFaq(btn) {
+    const answer = btn.nextElementSibling;
+    const icon = btn.querySelector('.faq-icon');
+    const isOpen = !answer.classList.contains('hidden');
+    // Tümünü kapat
+    document.querySelectorAll('.faq-answer').forEach(a => a.classList.add('hidden'));
+    document.querySelectorAll('.faq-icon').forEach(i => i.style.transform = 'rotate(0deg)');
+    if (!isOpen) { answer.classList.remove('hidden'); icon.style.transform = 'rotate(180deg)'; }
+}
+
+// ==================== İLETİŞİM ====================
+function submitContact(e) {
+    e.preventDefault();
+    showToast('success', '📨 Mesajınız gönderildi! En kısa sürede dönüş yapacağız.');
+    e.target.reset();
+}
+
+// ==================== NAVBAR SCROLL ====================
+window.addEventListener('scroll', () => {
+    const nav = document.getElementById('mainNav');
+    if (window.scrollY > 10) nav.classList.add('nav-scrolled');
+    else nav.classList.remove('nav-scrolled');
+});
+
+// ==================== BAŞLANGIÇ ====================
+window.addEventListener('load', () => {
+    // Yükleme ekranını kaldır
+    setTimeout(() => {
+        const loader = document.getElementById('loadingScreen');
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 500);
+    }, 800);
+    
+    updateFavCount();
+    updateNavVisibility();
+});
+
+// Modal dışı tıklama ile kapatma
+document.querySelectorAll('.modal-overlay').forEach(modal => {
+    modal.addEventListener('click', (e) => { if (e.target === modal) modal.classList.remove('active'); });
+});
+
+// ESC ile modal kapatma
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
+});
 </script>
 </body>
 </html>

@@ -719,14 +719,7 @@
 
 // ==================== VERİ KATMANI ====================
 const DB = {
-    products: [
-        { id: 1, name: "Filtre Kahve", brand: "NexCoffee", category: "İçecek", price: "85.00", discount: "75.00", stock: 40, barcode: "8690001", sku: "NX-001", unit: "Adet", active: true, desc: "Premium çekirdeklerden taze demlenmiş filtre kahve.", photo: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400" },
-        { id: 2, name: "San Sebastian Cheesecake", brand: "NexBakery", category: "Tatlı", price: "140.00", discount: "", stock: 12, barcode: "8690002", sku: "NX-002", unit: "Porsiyon", active: true, desc: "İspanyol usulü yanık cheesecake.", photo: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400" },
-        { id: 3, name: "Ev Yapımı Limonata", brand: "NexFresh", category: "Soğuk İçecek", price: "60.00", discount: "", stock: 20, barcode: "8690003", sku: "NX-003", unit: "Lt", active: true, desc: "Taze sıkılmış limonlardan doğal limonata.", photo: "https://images.unsplash.com/photo-1556881286-fc6915169721?w=400" },
-        { id: 4, name: "Klasik Hamburger", brand: "NexBurger", category: "Atıştırmalık", price: "190.00", discount: "160.00", stock: 25, barcode: "8690004", sku: "NX-004", unit: "Adet", active: true, desc: "180gr dana köfte, cheddar, özel sos.", photo: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" },
-        { id: 5, name: "Caramel Latte", brand: "NexCoffee", category: "İçecek", price: "95.00", discount: "", stock: 50, barcode: "8690005", sku: "NX-005", unit: "Adet", active: true, desc: "Karamel şuruplu kremalı latte.", photo: "https://images.unsplash.com/photo-1541167760496-1628856ab772?w=400" },
-        { id: 6, name: "Çikolatalı Brownie", brand: "NexBakery", category: "Tatlı", price: "110.00", discount: "90.00", stock: 15, barcode: "8690006", sku: "NX-006", unit: "Porsiyon", active: true, desc: "Bol çikolatalı, cevizli brownie.", photo: "https://images.unsplash.com/photo-1564355808539-22fda35bed7e?w=400" }
-    ],
+    products: []
     analytics: { total: 128, daily: 45, mobile: 105, desktop: 23 },
     favorites: [],
     actions: [
@@ -1020,7 +1013,7 @@ async function loadProductsFromSupabase(showMessage = false) {
         unit: p.unit || 'Adet',
         active: p.active !== false,
         desc: p.description || '',
-        photo: p.photo_url || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(p.name || 'Ürün') + '&background=4f46e5&color=fff&size=400')
+        photo: p.image || ('https://ui-avatars.com/api/?name=' + encodeURIComponent(p.name || 'Ürün') + '&background=4f46e5&color=fff&size=400')
     }));
 
     productsLoaded = true;
@@ -1139,7 +1132,7 @@ async function saveProduct(e) {
             description: document.getElementById('pDesc').value.trim(),
             unit: document.getElementById('pUnit').value,
             active: document.getElementById('pActive').checked,
-            photo_url: photoUrl,
+            image: photoUrl,
             updated_at: new Date().toISOString()
         };
 

@@ -1163,6 +1163,12 @@ async function saveProduct(e) {
     }
 }
 
+function addAction(icon, text) {
+    if (!Array.isArray(DB.actions)) DB.actions = [];
+    DB.actions.unshift({ icon, text, time: 'Şimdi' });
+    if (DB.actions.length > 10) DB.actions.length = 10;
+}
+
 function editProduct(id) { openProductModal(id); }
 
 async function deleteProduct(id) {

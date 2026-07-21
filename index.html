@@ -711,6 +711,13 @@
 </div>
 
 <!-- ===== JAVASCRIPT ===== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL = "https://otmrnyzqyhnyhkastfeu.supabase.co";
+const SUPABASE_KEY = "sb_publishable_7RvYvzXGgqG-LwgCXDlpCQ_WAXmH6kh";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+</script>
+
 <script>
 /**
  * ShopNex - Ürün Kataloğu & QR Kod Yönetim Sistemi
@@ -719,7 +726,7 @@
 
 // ==================== VERİ KATMANI ====================
 const DB = {
-    products: []
+    products: [],
     analytics: { total: 128, daily: 45, mobile: 105, desktop: 23 },
     favorites: [],
     actions: [
@@ -1419,11 +1426,22 @@ document.addEventListener('keydown', (e) => {
 });
 </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const SUPABASE_URL = "https://otmrnyzqyhnyhkastfeu.supabase.co";
-const SUPABASE_KEY = "sb_publishable_7RvYvzXGgqG-LwgCXDlpCQ_WAXmH6kh";
-const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+window.addEventListener('error', function (event) {
+  console.error('ShopNex hata:', event.error || event.message);
+  const loader = document.getElementById('loadingScreen');
+  if (loader) loader.remove();
+});
+window.addEventListener('unhandledrejection', function (event) {
+  console.error('ShopNex promise hatası:', event.reason);
+  const loader = document.getElementById('loadingScreen');
+  if (loader) loader.remove();
+});
+setTimeout(function () {
+  const loader = document.getElementById('loadingScreen');
+  if (loader) loader.remove();
+}, 5000);
 </script>
 
 </body>
